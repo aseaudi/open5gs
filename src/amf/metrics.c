@@ -363,7 +363,7 @@ void amf_metrics_reg_time_start(amf_ue_t *amf_ue)
     if (!amf_ue->suci)
         return;
 
-    amf_metrics_reg_time_stop(amf_ue);
+    //amf_metrics_reg_time_stop(amf_ue);
 
     reg_req = ogs_calloc(1, sizeof(*reg_req));
     ogs_assert(reg_req);
