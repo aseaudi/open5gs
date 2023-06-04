@@ -75,7 +75,7 @@ int nas_5gs_send_to_downlink_nas_transport(amf_ue_t *amf_ue, ogs_pkbuf_t *pkbuf)
 
 int nas_5gs_send_registration_accept(amf_ue_t *amf_ue)
 {
-    int rv;
+    int rv, reg_duration_ms;
     bool transfer_needed = false;
 
     ran_ue_t *ran_ue = NULL;
@@ -88,6 +88,8 @@ int nas_5gs_send_registration_accept(amf_ue_t *amf_ue)
         return OGS_NOTFOUND;
     }
 
+    reg_duration_ms = amf_metrics_reg_time_stop(amf_ue);
+    
     ran_ue = ran_ue_cycle(amf_ue->ran_ue);
     if (!ran_ue) {
         ogs_error("NG context has already been removed");
@@ -179,7 +181,10 @@ int nas_5gs_send_registration_accept(amf_ue_t *amf_ue)
             ogs_expect(rv == OGS_OK);
         }
     }
-
+    if (reg_duration_ms > 0) {
+        amf_metrics_inst_global_add(AMF_METR_GLOB_HIST_REG_TIME,
+                reg_duration_ms);
+    }
     return rv;
 }
 

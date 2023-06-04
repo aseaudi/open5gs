@@ -348,6 +348,58 @@ int amf_metrics_free_inst_by_cause(ogs_metrics_inst_t **inst)
     return amf_metrics_free_inst(inst, _AMF_METR_BY_CAUSE_MAX);
 }
 
+ogs_hash_t *metrics_hash_reg_req = NULL; /* REG REQ timestamps hash table */
+
+typedef struct amf_metric_reg_req_s {
+    int timestamp_ms;
+} amf_metric_reg_req_t;
+
+void amf_metrics_reg_time_start(amf_ue_t *amf_ue)
+{
+    amf_metric_reg_req_t *reg_req;
+
+    ogs_assert(amf_ue);
+
+    if (!amf_ue->suci)
+        return;
+
+    amf_metrics_reg_time_stop(amf_ue);
+
+    reg_req = ogs_calloc(1, sizeof(*reg_req));
+    ogs_assert(reg_req);
+    reg_req->timestamp_ms = ogs_time_now() / 1000;
+
+    ogs_hash_set(metrics_hash_reg_req,
+            amf_ue->suci, strlen(amf_ue->suci), reg_req);
+}
+
+int amf_metrics_reg_time_stop(amf_ue_t *amf_ue)
+{
+    amf_metric_reg_req_t *reg_req = NULL;
+    int timestamp = 0;
+    int now_ms;
+
+    ogs_assert(amf_ue);
+
+    if (!amf_ue->suci)
+        return 0;
+
+    reg_req = ogs_hash_get(metrics_hash_reg_req,
+            amf_ue->suci, strlen(amf_ue->suci));
+    if (reg_req) {
+        timestamp = reg_req->timestamp_ms;
+        ogs_hash_set(metrics_hash_reg_req, amf_ue->suci,
+                strlen(amf_ue->suci), NULL);
+        ogs_free(reg_req);
+    }
+
+    now_ms = ogs_time_now() / 1000;
+    if ((now_ms < timestamp) || (timestamp == 0))
+        return 0;
+
+    return now_ms - timestamp;
+}
+
 void amf_metrics_init(void)
 {
     ogs_metrics_context_t *ctx = ogs_metrics_self();
