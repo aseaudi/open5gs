@@ -417,6 +417,9 @@ void amf_metrics_init(void)
 
     amf_metrics_init_by_slice();
     amf_metrics_init_by_cause();
+
+     metrics_hash_reg_req = ogs_hash_make();
+    ogs_assert(metrics_hash_reg_req);
 }
 
 void amf_metrics_final(void)
