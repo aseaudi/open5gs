@@ -199,6 +199,8 @@ int nas_5gs_send_registration_reject(
         return OGS_NOTFOUND;
     }
 
+    amf_metrics_reg_time_stop(amf_ue);
+    
     switch (amf_ue->nas.registration.value) {
     case OGS_NAS_5GS_REGISTRATION_TYPE_INITIAL:
         amf_metrics_inst_by_cause_add(gmm_cause,

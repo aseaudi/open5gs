@@ -920,6 +920,8 @@ int gmm_handle_identity_response(amf_ue_t *amf_ue,
                 mobile_identity_header->type);
     }
 
+    amf_metrics_reg_time_start(amf_ue);
+    
     return OGS_OK;
 }
 
