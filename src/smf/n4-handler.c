@@ -27,6 +27,13 @@
 #include "ngap-path.h"
 #include "fd-path.h"
 
+static void log_usage_reports(sgwc_sess_t *sess, ogs_pfcp_session_report_request_t *pfcp_req);
+static void log_deletion_usage_reports(sgwc_sess_t *sess, ogs_pfcp_session_deletion_response_t *pfcp_rsp);
+static void log_start_usage_reports(sgwc_sess_t *sess);
+static UsageLoggerData build_usage_logger_data(sgwc_sess_t *sess, char const* event, uint64_t octets_in, uint64_t octets_out);
+static void log_usage_logger_data(UsageLoggerData usageLoggerData);
+static bool hex_array_to_string(uint8_t* hex_array, size_t hex_array_len, char* hex_string, size_t hex_string_len);
+
 uint8_t gtp_cause_from_pfcp(uint8_t pfcp_cause, uint8_t gtp_version)
 {
     switch (gtp_version) {
@@ -183,6 +190,10 @@ uint8_t smf_5gc_n4_handle_session_establishment_response(
 
     if (cause_value != OGS_PFCP_CAUSE_REQUEST_ACCEPTED)
         return cause_value;
+
+    if (ogs_pfcp_self()->usageLoggerState.enabled) {
+        log_start_usage_reports(sess);
+    }
 
     for (i = 0; i < OGS_MAX_NUM_OF_PDR; i++) {
         pdr = ogs_pfcp_handle_created_pdr(

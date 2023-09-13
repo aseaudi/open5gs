@@ -624,6 +624,12 @@ smf:
     mtu: 1400
     ctf:
       enabled: auto
+    cdr:
+      enabled: True
+      file_capture_period_sec: 1800
+      reporting_period_sec: 10
+      log_dir: /var/log/open5gs
+      sgw_name: PGW-01
     freeDiameter: @sysconfdir@/freeDiameter/smf.conf
 
 #
