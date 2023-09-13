@@ -1374,29 +1374,29 @@ static void log_start_usage_reports(smf_sess_t *sess) {
 }
 
 static UsageLoggerData build_usage_logger_data(smf_sess_t *sess, char const* event, uint64_t octets_in, uint64_t octets_out) {
-    smf_sess_t *sgwc_ue = NULL;
+    smf_ue_t *smf_ue = NULL;
     UsageLoggerData usageLoggerData = {0};
     
     ogs_assert(sess);
-    sgwc_ue = sess->smf_ue;
-    ogs_assert(sgwc_ue);
+    smf_ue = sess->smf_ue;
+    ogs_assert(smf_ue);
 
     strncpy(usageLoggerData.event, event, EVENT_STR_MAX_LEN);
-    strncpy(usageLoggerData.imsi, sgwc_ue->imsi_bcd, IMSI_STR_MAX_LEN);
+    strncpy(usageLoggerData.imsi, smf_ue->imsi_bcd, IMSI_STR_MAX_LEN);
     strncpy(usageLoggerData.apn, sess->session.name, APN_STR_MAX_LEN);
     usageLoggerData.qci = sess->session.qos.arp.priority_level;
     usageLoggerData.octets_in = octets_in;
     usageLoggerData.octets_out = octets_out;
 
     //strcpy(usageLoggerData.charging_id, "<charging_id placeholder>");
-    strncpy(usageLoggerData.msisdn_bcd, sgwc_ue->msisdn_bcd, MSISDN_BCD_STR_MAX_LEN);
-    strncpy(usageLoggerData.imeisv_bcd, sgwc_ue->imeisv_bcd, IMEISV_BCD_STR_MAX_LEN);
-    if (!hex_array_to_string(sgwc_ue->timezone_raw, sgwc_ue->timezone_raw_len, usageLoggerData.timezone_raw, TIMEZONE_RAW_STR_MAX_LEN)) {
+    strncpy(usageLoggerData.msisdn_bcd, smf_ue->msisdn_bcd, MSISDN_BCD_STR_MAX_LEN);
+    strncpy(usageLoggerData.imeisv_bcd, smf_ue->imeisv_bcd, IMEISV_BCD_STR_MAX_LEN);
+    if (!hex_array_to_string(smf_ue->timezone_raw, smf_ue->timezone_raw_len, usageLoggerData.timezone_raw, TIMEZONE_RAW_STR_MAX_LEN)) {
         ogs_error("Failed to convert raw timezone bytes to timezone hex string!");
     }
-    usageLoggerData.plmn = ogs_plmn_id_hexdump(&sgwc_ue->e_tai.plmn_id);
-    usageLoggerData.tac = sgwc_ue->e_tai.tac;
-    usageLoggerData.eci = sgwc_ue->e_cgi.cell_id;
+    usageLoggerData.plmn = ogs_plmn_id_hexdump(&smf_ue->e_tai.plmn_id);
+    usageLoggerData.tac = smf_ue->e_tai.tac;
+    usageLoggerData.eci = smf_ue->e_cgi.cell_id;
     //if (!hex_array_to_string(sgwc_ue->ue_ip_raw, sgwc_ue->ue_ip_raw_len, usageLoggerData.ue_ip, IP_STR_MAX_LEN)) {
     //    ogs_error("Failed to convert raw IP bytes to IP hex string!");
     //}
