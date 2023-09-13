@@ -1378,7 +1378,7 @@ static UsageLoggerData build_usage_logger_data(smf_sess_t *sess, char const* eve
     UsageLoggerData usageLoggerData = {0};
     
     ogs_assert(sess);
-    sgwc_ue = sess->sgwc_ue;
+    sgwc_ue = sess->smf_ue;
     ogs_assert(sgwc_ue);
 
     strncpy(usageLoggerData.event, event, EVENT_STR_MAX_LEN);
@@ -1388,7 +1388,7 @@ static UsageLoggerData build_usage_logger_data(smf_sess_t *sess, char const* eve
     usageLoggerData.octets_in = octets_in;
     usageLoggerData.octets_out = octets_out;
 
-    strcpy(usageLoggerData.charging_id, "<charging_id placeholder>");
+    //strcpy(usageLoggerData.charging_id, "<charging_id placeholder>");
     strncpy(usageLoggerData.msisdn_bcd, sgwc_ue->msisdn_bcd, MSISDN_BCD_STR_MAX_LEN);
     strncpy(usageLoggerData.imeisv_bcd, sgwc_ue->imeisv_bcd, IMEISV_BCD_STR_MAX_LEN);
     if (!hex_array_to_string(sgwc_ue->timezone_raw, sgwc_ue->timezone_raw_len, usageLoggerData.timezone_raw, TIMEZONE_RAW_STR_MAX_LEN)) {
@@ -1397,14 +1397,14 @@ static UsageLoggerData build_usage_logger_data(smf_sess_t *sess, char const* eve
     usageLoggerData.plmn = ogs_plmn_id_hexdump(&sgwc_ue->e_tai.plmn_id);
     usageLoggerData.tac = sgwc_ue->e_tai.tac;
     usageLoggerData.eci = sgwc_ue->e_cgi.cell_id;
-    if (!hex_array_to_string(sgwc_ue->ue_ip_raw, sgwc_ue->ue_ip_raw_len, usageLoggerData.ue_ip, IP_STR_MAX_LEN)) {
-        ogs_error("Failed to convert raw IP bytes to IP hex string!");
-    }
-    if (!hex_array_to_string(sgwc_ue->pgw_ip_raw, sgwc_ue->pgw_ip_raw_len, usageLoggerData.pgw_ip, IP_STR_MAX_LEN)) {
-        ogs_error("Failed to convert raw IP bytes to IP hex string!");
-    }
-    ogs_assert(OGS_ADDRSTRLEN < IP_STR_MAX_LEN);
-    OGS_ADDR(ogs_gtp_self()->gtpc_addr, usageLoggerData.sgw_ip);
+    //if (!hex_array_to_string(sgwc_ue->ue_ip_raw, sgwc_ue->ue_ip_raw_len, usageLoggerData.ue_ip, IP_STR_MAX_LEN)) {
+    //    ogs_error("Failed to convert raw IP bytes to IP hex string!");
+    //}
+    //if (!hex_array_to_string(sgwc_ue->pgw_ip_raw, sgwc_ue->pgw_ip_raw_len, usageLoggerData.//pgw_ip, IP_STR_MAX_LEN)) {
+    //    ogs_error("Failed to convert raw IP bytes to IP hex string!");
+    //}
+    //ogs_assert(OGS_ADDRSTRLEN < IP_STR_MAX_LEN);
+    OGS_ADDR(ogs_gtp_self()->gtpc_addr, usageLoggerData.pgw_ip);
 
     return usageLoggerData;
 }
