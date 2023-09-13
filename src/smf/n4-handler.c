@@ -1368,13 +1368,13 @@ void smf_n4_handle_session_report_request(
     }
 }
 
-static void log_start_usage_reports(sgwc_sess_t *sess) {
+static void log_start_usage_reports(smf_sess_t *sess) {
     UsageLoggerData usageLoggerData = build_usage_logger_data(sess, "session_start", 0, 0);
     log_usage_logger_data(usageLoggerData);
 }
 
-static UsageLoggerData build_usage_logger_data(sgwc_sess_t *sess, char const* event, uint64_t octets_in, uint64_t octets_out) {
-    sgwc_ue_t *sgwc_ue = NULL;
+static UsageLoggerData build_usage_logger_data(smf_sess_t *sess, char const* event, uint64_t octets_in, uint64_t octets_out) {
+    smf_sess_t *sgwc_ue = NULL;
     UsageLoggerData usageLoggerData = {0};
     
     ogs_assert(sess);
