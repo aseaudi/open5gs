@@ -49,6 +49,14 @@ smf:
 #    enabled: auto   # auto(default)|yes|no
   freeDiameter: @sysconfdir@/freeDiameter/smf.conf
 
+#    Add support for travelping upg pgw:
+#    travelping upg needs nwi network instance name 
+#    to route traffic to/from sgi interface
+#
+#    use_upg : true
+#    sgi_nwi : sgi
+#
+#
 ################################################################################
 # SMF Info
 ################################################################################
