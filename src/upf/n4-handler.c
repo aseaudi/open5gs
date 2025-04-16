@@ -334,7 +334,7 @@ void upf_n4_handle_session_modification_request(
 
     int16_t ret;
     ret = ogs_pfcp_parse_volume(
-        &vol_quota, req->update_urr->volume_quota);
+        &vol_quota, &req->update_urr->volume_quota);
     if (ret == 0) goto exit;
     if (vol_quota.total_volume) == 1000) {
         // drop ue traffic
