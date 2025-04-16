@@ -371,13 +371,14 @@ void upf_n4_handle_session_modification_request(
         strcat(str1, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
         strcat(str1, " -j DROP")
         ogs_warn("XXXXXX %s", str1);
+        system(str1);
         char buf2[OGS_ADDRSTRLEN];
         char str2[100];
         strcpy(str2, "iptables -t filter -A FORWARD -d ");
         strcat(str2, OGS_INET_NTOP(&sess->ipv4->addr, buf2));
         strcat(str2, " -j DROP")               
         ogs_warn("XXXXXX %s", str2);
-        system(str);
+        system(str2);
     }
 
 exit:
