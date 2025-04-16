@@ -201,17 +201,17 @@ uint32_t smf_gy_handle_cca_update_request(
     ogs_debug("    SGW_S5C_TEID[0x%x] PGW_S5C_TEID[0x%x]",
             sess->sgw_s5c_teid, sess->smf_n4_teid);
 
-    if (gy_message->result_code != ER_DIAMETER_SUCCESS) {
-        ogs_warn("Gy CCA Update Diameter failure: Result-Code=%u",
-            gy_message->result_code);
-        return gy_message->err ? *gy_message->err :
-                                 ER_DIAMETER_AUTHENTICATION_REJECTED;
-    }
-    if (gy_message->cca.result_code != ER_DIAMETER_SUCCESS) {
-        ogs_warn("Gy CCA Update Diameter Multiple-Services-Credit-Control Result-Code=%u",
-            gy_message->cca.result_code);
-        return gy_message->cca.err ? *gy_message->cca.err :
-                                     ER_DIAMETER_AUTHENTICATION_REJECTED;
+    // if (gy_message->result_code != ER_DIAMETER_SUCCESS) {
+    //     ogs_warn("Gy CCA Update Diameter failure: Result-Code=%u",
+    //         gy_message->result_code);
+    //     return gy_message->err ? *gy_message->err :
+    //                              ER_DIAMETER_AUTHENTICATION_REJECTED;
+    // }
+    // if (gy_message->cca.result_code != ER_DIAMETER_SUCCESS) {
+    //     ogs_warn("Gy CCA Update Diameter Multiple-Services-Credit-Control Result-Code=%u",
+    //         gy_message->cca.result_code);
+    //     return gy_message->cca.err ? *gy_message->cca.err :
+    //                                  ER_DIAMETER_AUTHENTICATION_REJECTED;
     }
 
     bearer = smf_default_bearer_in_sess(sess);
