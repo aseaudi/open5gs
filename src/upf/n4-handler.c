@@ -352,56 +352,20 @@ void upf_n4_handle_session_modification_request(
 
     ogs_warn("XXXXXX upf_n4_handle_session_modification_request");
     
-
-    // ogs_pfcp_volume_quota_t vol_quota;
-    // ogs_pfcp_tlv_update_urr_t urr;
-    // urr = req->update_urr[0];
-    // ogs_pfcp_tlv_volume_quota_t volume_quota;
-    // volume_quota = urr.volume_quota;
-    // int16_t ret;
     ogs_warn("XXXXXX 1");
-    // if (!volume_quota.data) goto exit;
-    // ogs_warn("XXXXXX volume_quota");
-    // if (!volume_quota.presence) goto exit;
-    // ogs_warn("XXXXXX volume_quota.presence");
     func1(&sess->pfcp, &req->update_urr[0]);
     ogs_warn("XXXXXX 2");
-    // if (ret == 0) goto exit;
     // if (vol_quota.total_volume == 1000) {
     if (true){
         ogs_warn("XXXXXX 3");
         // drop ue traffic
         // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
-        char a[5],b[5],c[5],d[5];
-        ogs_warn("XXXXXX char");
-        if (sess->ipv4) {
-            ogs_warn("XXXXXX if (sess->ipv4) ");
-            char buf1[OGS_ADDRSTRLEN];
-            ogs_warn("XXXXXX ipv4 %s", OGS_INET_NTOP(&sess->ipv4->addr, buf1));
-            // sprintf(b, "%d", sess->ipv4->addr[1]);
-            // sprintf(c, "%d", sess->ipv4->addr[2]);
-            // sprintf(d, "%d", sess->ipv4->addr[3]);
-        } else {
-            ogs_warn("XXXXXX exit");
-            goto exit;
-        }
+   
         ogs_warn("XXXXXX 2");
-        // a = itoa(sess->ipv4[0]);
-        // b = iota(sess->ipv4[1]);
-        // c = iota(sess->ipv4->addr[2]);
-        // d = iota(sess->ipv4->addr[3]);
-        ogs_warn("XXXXXX a.b.c.d %s.%s.%s.%s", a, b, c, d);
-        ogs_warn("XXXXXX 3");
 
-        char str[80];
-        strcpy(str, "iptables -t filter -A FORWARD ");
-        strcat(str, a);
-        strcat(str, ".");
-        strcat(str, b);
-        strcat(str, ".");
-        strcat(str, c);
-        strcat(str, ".");
-        strcat(str, d);
+        char str[100];
+        strcpy(str, "iptables -t filter -A FORWARD -d ");
+        strcat(str, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
         strcat(str, " -j DROP");
         ogs_warn("XXXXXX 4");
         ogs_warn("%s", str);
