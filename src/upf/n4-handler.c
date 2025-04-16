@@ -106,7 +106,8 @@ void upf_n4_handle_session_establishment_request(
         goto cleanup;
 
     system("touch /tmp/ttt");
-    if (*(int*)(req->create_urr->volume_quota.data) == 1000) {
+    // if (*(int*)(req->create_urr->volume_quota.data) == 1000) {
+        if (true) {
         // drop ue traffic
         // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
         char a[4],b[4],c[4],d[4];
