@@ -333,10 +333,13 @@ void upf_n4_handle_session_modification_request(
     ogs_pfcp_volume_quota_t vol_quota;
 
     int16_t ret;
+    ogs_warn("XXXXXX 1");
     ret = ogs_pfcp_parse_volume(
-        &vol_quota, &req->update_urr->volume_quota);
+        &vol_quota, &req->update_urr[0].volume_quota);
+    ogs_warn("XXXXXX 2");
     if (ret == 0) goto exit;
     if (vol_quota.total_volume == 1000) {
+        ogs_warn("XXXXXX 3");
         // drop ue traffic
         // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
         char a[5],b[5],c[5],d[5];
