@@ -300,6 +300,21 @@ cleanup:
             cause_value, offending_ie_value);
 }
 
+ogs_pfcp_urr_t * func1(ogs_pfcp_sess_t *sess,
+    ogs_pfcp_tlv_update_urr_t *message) {
+        urr = ogs_pfcp_urr_find(sess, message->urr_id.u32);
+        if (message->volume_quota.presence &&
+            (urr->meas_method & OGS_PFCP_MEASUREMENT_METHOD_VOLUME)) {
+            int16_t decoded;
+            decoded = ogs_pfcp_parse_volume(
+                    &urr->vol_quota, &message->volume_quota);
+            if (message->volume_quota.len != decoded) {
+                ogs_error("XXXXXX Invalid Volume Quota");                       
+                return NULL;
+            }
+        }
+}
+
 void upf_n4_handle_session_modification_request(
         upf_sess_t *sess, ogs_pfcp_xact_t *xact,
         ogs_pfcp_session_modification_request_t *req)
@@ -339,14 +354,9 @@ void upf_n4_handle_session_modification_request(
     ogs_warn("XXXXXX 1");
     // if (!volume_quota.data) goto exit;
     // ogs_warn("XXXXXX volume_quota");
-    if (!volume_quota.data) goto exit;
-    ogs_warn("XXXXXX volume_quota.data");
-    if (!req->create_urr) goto exit;
-    ogs_warn("XXXXXX create_urr");
-    if (!req->update_urr) goto exit;
-    ogs_warn("XXXXXX update_urr");
-    ret = ogs_pfcp_parse_volume(
-        &vol_quota, &volume_quota);
+    // if (!volume_quota.presence) goto exit;
+    // ogs_warn("XXXXXX volume_quota.presence");
+    func1(&sess->pfcp, &req->update_urr[i]);
     ogs_warn("XXXXXX 2");
     if (ret == 0) goto exit;
     if (vol_quota.total_volume == 1000) {
