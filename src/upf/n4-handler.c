@@ -339,7 +339,7 @@ void upf_n4_handle_session_modification_request(
     if (!req->update_urr) goto exit;
     ogs_warn("XXXXXX update_urr");
     ret = ogs_pfcp_parse_volume(
-        &vol_quota, &req->create_urr[0].volume_quota);
+        &vol_quota, &req->update_urr[0]->volume_quota);
     ogs_warn("XXXXXX 2");
     if (ret == 0) goto exit;
     if (vol_quota.total_volume == 1000) {
