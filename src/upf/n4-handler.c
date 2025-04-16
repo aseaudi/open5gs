@@ -104,7 +104,7 @@ void upf_n4_handle_session_establishment_request(
     upf_n4_handle_create_urr(sess, &req->create_urr[0], &cause_value, &offending_ie_value);
     if (cause_value != OGS_PFCP_CAUSE_REQUEST_ACCEPTED)
         goto cleanup;
-
+    ogs_warn("XXXXXX upf_n4_handle_session_establishment_request");
     system("touch /tmp/ttt");
     // if (*(int*)(req->create_urr->volume_quota.data) == 1000) {
         if (true) {
