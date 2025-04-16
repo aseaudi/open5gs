@@ -307,9 +307,10 @@ ogs_pfcp_urr_t * func1(ogs_pfcp_sess_t *sess,
         int16_t decoded;
         ogs_pfcp_urr_t *urr = NULL;
         urr = ogs_pfcp_urr_find(sess, message->urr_id.u32);
+        ogs_warn("XXXXXX yyy;")
         if (message->volume_quota.presence &&
             (urr->meas_method & OGS_PFCP_MEASUREMENT_METHOD_VOLUME)) {
-            
+                ogs_warn("XXXXXX zzz;")
             decoded = ogs_pfcp_parse_volume(
                     &urr->vol_quota, &message->volume_quota);
             if (message->volume_quota.len != decoded) {
@@ -317,6 +318,7 @@ ogs_pfcp_urr_t * func1(ogs_pfcp_sess_t *sess,
                 return NULL;
             }
         }
+        return urr;
 }
 
 void upf_n4_handle_session_modification_request(
@@ -349,12 +351,12 @@ void upf_n4_handle_session_modification_request(
     ogs_warn("XXXXXX upf_n4_handle_session_modification_request");
     
 
-    ogs_pfcp_volume_quota_t vol_quota;
-    ogs_pfcp_tlv_update_urr_t urr;
-    urr = req->update_urr[0];
-    ogs_pfcp_tlv_volume_quota_t volume_quota;
-    volume_quota = urr.volume_quota;
-    int16_t ret;
+    // ogs_pfcp_volume_quota_t vol_quota;
+    // ogs_pfcp_tlv_update_urr_t urr;
+    // urr = req->update_urr[0];
+    // ogs_pfcp_tlv_volume_quota_t volume_quota;
+    // volume_quota = urr.volume_quota;
+    // int16_t ret;
     ogs_warn("XXXXXX 1");
     // if (!volume_quota.data) goto exit;
     // ogs_warn("XXXXXX volume_quota");
