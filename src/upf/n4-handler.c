@@ -357,6 +357,7 @@ void upf_n4_handle_session_modification_request(
     ogs_warn("XXXXXX 2");
     // if (vol_quota.total_volume == 1000) {
     if (true){
+        char buf1[OGS_ADDRSTRLEN];
         ogs_warn("XXXXXX 3");
         // drop ue traffic
         // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
