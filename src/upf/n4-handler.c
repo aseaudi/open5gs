@@ -299,26 +299,6 @@ cleanup:
             OGS_PFCP_SESSION_ESTABLISHMENT_RESPONSE_TYPE,
             cause_value, offending_ie_value);
 }
-// ogs_pfcp_urr_t * func1(ogs_pfcp_sess_t *sess,
-//     ogs_pfcp_tlv_update_urr_t *message);
-
-// ogs_pfcp_urr_t * func1(ogs_pfcp_sess_t *sess,
-//     ogs_pfcp_tlv_update_urr_t *message) {
-//         int16_t decoded;
-//         ogs_pfcp_urr_t *urr = NULL;
-//         urr = ogs_pfcp_urr_find(sess, message->urr_id.u32);
-//         if (message->volume_quota.presence &&
-//             (urr->meas_method & OGS_PFCP_MEASUREMENT_METHOD_VOLUME)) {
-//             decoded = ogs_pfcp_parse_volume(
-//                     &urr->vol_quota, &message->volume_quota);
-//             if(urr->vol_quota.total_volume == 1000) 
-//             if (message->volume_quota.len != decoded) {
-//                 ogs_error("XXXXXX Invalid Volume Quota");                       
-//                 return NULL;
-//             }
-//         }
-//         return urr;
-// }
 
 void upf_n4_handle_session_modification_request(
         upf_sess_t *sess, ogs_pfcp_xact_t *xact,
@@ -349,7 +329,6 @@ void upf_n4_handle_session_modification_request(
 
     ogs_warn("XXXXXX upf_n4_handle_session_modification_request");
     
-    // func1(&sess->pfcp, &req->update_urr[0]);
     if (req->update_urr[0].volume_quota.presence) {
         ogs_warn("XXXXXX volume quota in urr present");
         // forward ue traffic

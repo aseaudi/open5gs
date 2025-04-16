@@ -531,7 +531,6 @@ void ogs_pfcp_parse_usage_report_trigger(
 int16_t ogs_pfcp_parse_volume(
         ogs_pfcp_volume_threshold_t *volume, ogs_tlv_octet_t *octet)
 {
-    ogs_warn("XXXXXX ogs_pfcp_parse_volume");
     int16_t size = 0;
 
     ogs_assert(volume);
@@ -541,7 +540,7 @@ int16_t ogs_pfcp_parse_volume(
 
     volume->flags = ((unsigned char *)octet->data)[size];
     size += sizeof(volume->flags);
-    ogs_warn("XXXXXX ogs_pfcp_parse_volume 1");
+
     if (volume->tovol) {
         if (size + sizeof(volume->total_volume) > octet->len) {
             ogs_error("size[%d]+sizeof(volume->total_volume)[%d] "
@@ -554,7 +553,6 @@ int16_t ogs_pfcp_parse_volume(
         volume->total_volume = be64toh(volume->total_volume);
         size += sizeof(volume->total_volume);
     }
-    ogs_warn("XXXXXX ogs_pfcp_parse_volume 2");
     if (volume->ulvol) {
         if (size + sizeof(volume->uplink_volume) > octet->len) {
             ogs_error("size[%d]+sizeof(volume->uplink_volume)[%d] "
@@ -567,7 +565,6 @@ int16_t ogs_pfcp_parse_volume(
         volume->uplink_volume = be64toh(volume->uplink_volume);
         size += sizeof(volume->uplink_volume);
     }
-    ogs_warn("XXXXXX ogs_pfcp_parse_volume 3");
     if (volume->dlvol) {
         if (size + sizeof(volume->downlink_volume) > octet->len) {
             ogs_error("size[%d]+sizeof(volume->downlink_volume)[%d] "
@@ -580,7 +577,7 @@ int16_t ogs_pfcp_parse_volume(
         volume->downlink_volume = be64toh(volume->downlink_volume);
         size += sizeof(volume->downlink_volume);
     }
-    ogs_warn("XXXXXX ogs_pfcp_parse_volume 4");
+
     if (size != octet->len)
         ogs_error("Mismatch IE Length[%d] != Decoded[%d]", octet->len, size);
 
