@@ -376,10 +376,11 @@ void upf_n4_handle_session_modification_request(
         ogs_warn("XXXXXX char");
         if (sess->ipv4) {
             ogs_warn("XXXXXX if (sess->ipv4) ");
-            sprintf(a, "%d", sess->ipv4->addr[0]);
-            sprintf(b, "%d", sess->ipv4->addr[1]);
-            sprintf(c, "%d", sess->ipv4->addr[2]);
-            sprintf(d, "%d", sess->ipv4->addr[3]);
+            char buf1[OGS_ADDRSTRLEN];
+            ogs_warn("XXXXXX ipv4 %s", OGS_INET_NTOP(&sess->ipv4->addr, buf1));
+            // sprintf(b, "%d", sess->ipv4->addr[1]);
+            // sprintf(c, "%d", sess->ipv4->addr[2]);
+            // sprintf(d, "%d", sess->ipv4->addr[3]);
         } else {
             ogs_warn("XXXXXX exit");
             goto exit;
