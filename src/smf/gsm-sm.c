@@ -443,8 +443,8 @@ test_can_proceed:
             diam_err = sess->sm_data.s6b_aaa_err;
         if (sess->sm_data.gx_cca_init_err != ER_DIAMETER_SUCCESS)
             diam_err = sess->sm_data.gx_cca_init_err;
-        if (sess->sm_data.gy_cca_init_err != ER_DIAMETER_SUCCESS)
-            diam_err = sess->sm_data.gy_cca_init_err;
+        // if (sess->sm_data.gy_cca_init_err != ER_DIAMETER_SUCCESS)
+        //     diam_err = sess->sm_data.gy_cca_init_err;
 
         if (diam_err == ER_DIAMETER_SUCCESS || diam_err == 4012) {
             OGS_FSM_TRAN(s, smf_gsm_state_wait_pfcp_establishment);
