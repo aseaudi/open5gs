@@ -313,6 +313,8 @@ ogs_pfcp_urr_t * func1(ogs_pfcp_sess_t *sess,
                 ogs_warn("XXXXXX zzz;");
             decoded = ogs_pfcp_parse_volume(
                     &urr->vol_quota, &message->volume_quota);
+            if(*urr->vol_quota.total_volume == 1000) 
+            ogs_wan("XXXXXX volquota = 1000");
             if (message->volume_quota.len != decoded) {
                 ogs_error("XXXXXX Invalid Volume Quota");                       
                 return NULL;
@@ -351,7 +353,7 @@ void upf_n4_handle_session_modification_request(
     ogs_warn("XXXXXX upf_n4_handle_session_modification_request");
     
 
-    // ogs_pfcp_volume_quota_t vol_quota;
+    ogs_pfcp_volume_quota_t vol_quota;
     // ogs_pfcp_tlv_update_urr_t urr;
     // urr = req->update_urr[0];
     // ogs_pfcp_tlv_volume_quota_t volume_quota;
@@ -364,8 +366,9 @@ void upf_n4_handle_session_modification_request(
     // ogs_warn("XXXXXX volume_quota.presence");
     func1(&sess->pfcp, &req->update_urr[i]);
     ogs_warn("XXXXXX 2");
-    if (ret == 0) goto exit;
-    if (vol_quota.total_volume == 1000) {
+    // if (ret == 0) goto exit;
+    // if (vol_quota.total_volume == 1000) {
+    if (true){
         ogs_warn("XXXXXX 3");
         // drop ue traffic
         // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
