@@ -301,13 +301,15 @@ cleanup:
 }
 ogs_pfcp_urr_t * func1(ogs_pfcp_sess_t *sess,
     ogs_pfcp_tlv_update_urr_t *message);
-    
+
 ogs_pfcp_urr_t * func1(ogs_pfcp_sess_t *sess,
     ogs_pfcp_tlv_update_urr_t *message) {
+        int16_t decoded;
+        ogs_pfcp_urr_t *urr = NULL;
         urr = ogs_pfcp_urr_find(sess, message->urr_id.u32);
         if (message->volume_quota.presence &&
             (urr->meas_method & OGS_PFCP_MEASUREMENT_METHOD_VOLUME)) {
-            int16_t decoded;
+            
             decoded = ogs_pfcp_parse_volume(
                     &urr->vol_quota, &message->volume_quota);
             if (message->volume_quota.len != decoded) {
