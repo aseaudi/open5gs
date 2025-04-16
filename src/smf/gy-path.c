@@ -1119,7 +1119,8 @@ static void smf_gy_cca_cb(void *data, struct msg **msg)
 
     if (gy_message->result_code != ER_DIAMETER_SUCCESS) {
         ogs_warn("ERROR DIAMETER Result Code(%d)", gy_message->result_code);
-        goto out;
+        // don't exit yet and delete bearer, maybe it is 4012 credit needs recharge
+        // goto out;
     }
 
     ret = fd_msg_browse(*msg, MSG_BRW_FIRST_CHILD, &avp, NULL);

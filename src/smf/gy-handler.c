@@ -116,6 +116,12 @@ static void urr_update_time(smf_sess_t *sess, ogs_pfcp_urr_t *urr, ogs_diam_gy_m
         urr->rep_triggers.time_threshold = 0;
         urr->time_threshold = 0;
     }
+
+    // if no credit left, force urr after 1 minute, to check if recharge balance
+    if (gy_message->result_code == 4012) {
+        urr->rep_triggers.time_quota = 1;
+        urr->time_quota = 60;       
+    }
 }
 
 /* Returns ER_DIAMETER_SUCCESS on success, Diameter error code on failue.
@@ -241,6 +247,9 @@ uint32_t smf_gy_handle_cca_update_request(
         modify_flags |= OGS_PFCP_MODIFY_URR_QUOTA_VALIDITY_TIME;
 
     if (urr->time_quota != prev_time_quota)
+        modify_flags |= OGS_PFCP_MODIFY_URR_TIME_QUOTA;
+
+    if (urr->time_quota)
         modify_flags |= OGS_PFCP_MODIFY_URR_TIME_QUOTA;
 
     if (urr->vol_quota.tovol || urr->vol_quota.total_volume)
