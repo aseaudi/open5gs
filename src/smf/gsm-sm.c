@@ -934,6 +934,9 @@ void smf_gsm_state_operational(ogs_fsm_t *s, smf_event_t *e)
                 ogs_assert(pfcp_xact);
                 diam_err = smf_gy_handle_cca_update_request(
                         sess, gy_message, pfcp_xact);
+                // if no credit keep session up and stop downloading until recharge balance
+                if (gy_message->result_code == 4012)
+                    break;
                 if (diam_err != ER_DIAMETER_SUCCESS)
                     OGS_FSM_TRAN(s, smf_gsm_state_wait_pfcp_deletion);
                 break;
