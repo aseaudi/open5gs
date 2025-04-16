@@ -108,62 +108,69 @@ void upf_n4_handle_session_establishment_request(
 
     // if (*(int*)(req->create_urr->volume_quota.data) == 1000) {
         if (true) {
-        // drop ue traffic
-        // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
-        char a[4],b[4],c[4],d[4];
-        ogs_warn("XXXXXX char");
-        sprintf(a, "%d", sess->ipv4->addr[0]);
-        sprintf(b, "%d", sess->ipv4->addr[1]);
-        sprintf(c, "%d", sess->ipv4->addr[2]);
-        sprintf(d, "%d", sess->ipv4->addr[3]);
-        ogs_warn("XXXXXX 2");
-        // a = itoa(sess->ipv4[0]);
-        // b = iota(sess->ipv4[1]);
-        // c = iota(sess->ipv4->addr[2]);
-        // d = iota(sess->ipv4->addr[3]);
-        ogs_debug("XXXXXX a.b.c.d %s.%s.%s.%s", a, b, c, d);
-        ogs_warn("XXXXXX 3");
-
-        char str[80];
-        strcpy(str, "iptables -t filter -A FORWARD ");
-        strcat(str, a);
-        strcat(str, ".");
-        strcat(str, b);
-        strcat(str, ".");
-        strcat(str, c);
-        strcat(str, ".");
-        strcat(str, d);
-        strcat(str, " -j DROP");
-        ogs_warn("XXXXXX 4");
-
-        system(str);
-        ogs_warn("XXXXXX 5");
-
-    } else {
-        // forward ue traffic
-        // iptables -t filter -D FORWARD -s 1.2.3.4 -j DROP
-        char a[4],b[4],c[4],d[4];
-        sprintf(a, "%d", sess->ipv4->addr[0]);
-        sprintf(b, "%d", sess->ipv4->addr[1]);
-        sprintf(c, "%d", sess->ipv4->addr[2]);
-        sprintf(d, "%d", sess->ipv4->addr[3]);
-        // a = itoa(sess->ipv4[0]);
-        // b = iota(sess->ipv4[1]);
-        // c = iota(sess->ipv4[2]);
-        // d = iota(sess->ipv4[3]);
-        ogs_debug("XXXXXX a.b.c.d %s.%s.%s.%s", a, b, c, d);
-        char str[80];
-        strcpy(str, "iptables -t filter -D FORWARD ");
-        strcat(str, a);
-        strcat(str, ".");
-        strcat(str, b);
-        strcat(str, ".");
-        strcat(str, c);
-        strcat(str, ".");
-        strcat(str, d);
-        system(str);
-    }
-
+            // drop ue traffic
+            // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
+            char a[5],b[5],c[5],d[5];
+            ogs_warn("XXXXXX char");
+            if (sess->ipv4) {
+                ogs_warn("XXXXXX if (sess->ipv4) ");
+                sprintf(a, "%d", sess->ipv4->addr[0]);
+                sprintf(b, "%d", sess->ipv4->addr[1]);
+                sprintf(c, "%d", sess->ipv4->addr[2]);
+                sprintf(d, "%d", sess->ipv4->addr[3]);
+            } else {
+                ogs_warn("XXXXXX exit");
+                goto exit;
+            }
+            ogs_warn("XXXXXX 2");
+            // a = itoa(sess->ipv4[0]);
+            // b = iota(sess->ipv4[1]);
+            // c = iota(sess->ipv4->addr[2]);
+            // d = iota(sess->ipv4->addr[3]);
+            ogs_debug("XXXXXX a.b.c.d %s.%s.%s.%s", a, b, c, d);
+            ogs_warn("XXXXXX 3");
+    
+            char str[80];
+            strcpy(str, "iptables -t filter -A FORWARD ");
+            strcat(str, a);
+            strcat(str, ".");
+            strcat(str, b);
+            strcat(str, ".");
+            strcat(str, c);
+            strcat(str, ".");
+            strcat(str, d);
+            strcat(str, " -j DROP");
+            ogs_warn("XXXXXX 4");
+    
+            system(str);
+            ogs_warn("XXXXXX 5");
+    
+        } else {
+            // forward ue traffic
+            // iptables -t filter -D FORWARD -s 1.2.3.4 -j DROP
+            char a[4],b[4],c[4],d[4];
+            sprintf(a, "%d", sess->ipv4->addr[0]);
+            sprintf(b, "%d", sess->ipv4->addr[1]);
+            sprintf(c, "%d", sess->ipv4->addr[2]);
+            sprintf(d, "%d", sess->ipv4->addr[3]);
+            // a = itoa(sess->ipv4[0]);
+            // b = iota(sess->ipv4[1]);
+            // c = iota(sess->ipv4[2]);
+            // d = iota(sess->ipv4[3]);
+            ogs_debug("XXXXXX a.b.c.d %s.%s.%s.%s", a, b, c, d);
+            char str[80];
+            strcpy(str, "iptables -t filter -D FORWARD ");
+            strcat(str, a);
+            strcat(str, ".");
+            strcat(str, b);
+            strcat(str, ".");
+            strcat(str, c);
+            strcat(str, ".");
+            strcat(str, d);
+            system(str);
+        }
+    
+    exit:
     if (req->apn_dnn.presence) {
         char apn_dnn[OGS_MAX_DNN_LEN+1];
 
