@@ -403,7 +403,7 @@ void upf_n4_handle_session_modification_request(
         strcat(str, d);
         strcat(str, " -j DROP");
         ogs_warn("XXXXXX 4");
-
+        osg_warn(str);
         system(str);
         ogs_warn("XXXXXX 5");
 
