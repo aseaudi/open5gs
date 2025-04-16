@@ -299,7 +299,9 @@ cleanup:
             OGS_PFCP_SESSION_ESTABLISHMENT_RESPONSE_TYPE,
             cause_value, offending_ie_value);
 }
-
+ogs_pfcp_urr_t * func1(ogs_pfcp_sess_t *sess,
+    ogs_pfcp_tlv_update_urr_t *message);
+    
 ogs_pfcp_urr_t * func1(ogs_pfcp_sess_t *sess,
     ogs_pfcp_tlv_update_urr_t *message) {
         urr = ogs_pfcp_urr_find(sess, message->urr_id.u32);
