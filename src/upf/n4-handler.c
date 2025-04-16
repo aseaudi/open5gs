@@ -334,6 +334,10 @@ void upf_n4_handle_session_modification_request(
 
     int16_t ret;
     ogs_warn("XXXXXX 1");
+    if (!req->create_urr) goto exit;
+    ogs_warn("XXXXXX create_urr");
+    if (!req->update_urr) goto exit;
+    ogs_warn("XXXXXX update_urr");
     ret = ogs_pfcp_parse_volume(
         &vol_quota, &req->update_urr[0].volume_quota);
     ogs_warn("XXXXXX 2");
