@@ -299,29 +299,26 @@ cleanup:
             OGS_PFCP_SESSION_ESTABLISHMENT_RESPONSE_TYPE,
             cause_value, offending_ie_value);
 }
-ogs_pfcp_urr_t * func1(ogs_pfcp_sess_t *sess,
-    ogs_pfcp_tlv_update_urr_t *message);
+// ogs_pfcp_urr_t * func1(ogs_pfcp_sess_t *sess,
+//     ogs_pfcp_tlv_update_urr_t *message);
 
-ogs_pfcp_urr_t * func1(ogs_pfcp_sess_t *sess,
-    ogs_pfcp_tlv_update_urr_t *message) {
-        int16_t decoded;
-        ogs_pfcp_urr_t *urr = NULL;
-        urr = ogs_pfcp_urr_find(sess, message->urr_id.u32);
-        ogs_warn("XXXXXX yyy;");
-        if (message->volume_quota.presence &&
-            (urr->meas_method & OGS_PFCP_MEASUREMENT_METHOD_VOLUME)) {
-                ogs_warn("XXXXXX zzz;");
-            decoded = ogs_pfcp_parse_volume(
-                    &urr->vol_quota, &message->volume_quota);
-            if(urr->vol_quota.total_volume == 1000) 
-            ogs_warn("XXXXXX volquota = 1000");
-            if (message->volume_quota.len != decoded) {
-                ogs_error("XXXXXX Invalid Volume Quota");                       
-                return NULL;
-            }
-        }
-        return urr;
-}
+// ogs_pfcp_urr_t * func1(ogs_pfcp_sess_t *sess,
+//     ogs_pfcp_tlv_update_urr_t *message) {
+//         int16_t decoded;
+//         ogs_pfcp_urr_t *urr = NULL;
+//         urr = ogs_pfcp_urr_find(sess, message->urr_id.u32);
+//         if (message->volume_quota.presence &&
+//             (urr->meas_method & OGS_PFCP_MEASUREMENT_METHOD_VOLUME)) {
+//             decoded = ogs_pfcp_parse_volume(
+//                     &urr->vol_quota, &message->volume_quota);
+//             if(urr->vol_quota.total_volume == 1000) 
+//             if (message->volume_quota.len != decoded) {
+//                 ogs_error("XXXXXX Invalid Volume Quota");                       
+//                 return NULL;
+//             }
+//         }
+//         return urr;
+// }
 
 void upf_n4_handle_session_modification_request(
         upf_sess_t *sess, ogs_pfcp_xact_t *xact,
@@ -352,57 +349,31 @@ void upf_n4_handle_session_modification_request(
 
     ogs_warn("XXXXXX upf_n4_handle_session_modification_request");
     
-    ogs_warn("XXXXXX 1");
-    func1(&sess->pfcp, &req->update_urr[0]);
-    ogs_warn("XXXXXX 2");
-    // if (vol_quota.total_volume == 1000) {
+    // func1(&sess->pfcp, &req->update_urr[0]);
     if (req->update_urr[0].volume_quota.presence) {
-     // forward ue traffic
+        ogs_warn("XXXXXX volume quota in urr present");
+        // forward ue traffic
         // iptables -t filter -D FORWARD -s 1.2.3.4 -j DROP
-        ogs_warn("XXXXXX volume quota in urr absent");
-
         char buf1[OGS_ADDRSTRLEN];
-        ogs_warn("XXXXXX 33");
-        // drop ue traffic
-        // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
-   
-        ogs_warn("XXXXXX 22");
-
         char str[100];
         strcpy(str, "iptables -t filter -D FORWARD -d ");
         strcat(str, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
         strcat(str, " -j DROP");
-        ogs_warn("XXXXXX 43");
         ogs_warn("%s", str);
         system(str);
-        ogs_warn("XXXXXX 54");
-
-    } else {
-       
-
-        ogs_warn("XXXXXX volume quota in urr present");
-        // if (true){
-            char buf1[OGS_ADDRSTRLEN];
-            ogs_warn("XXXXXX 3");
-            // drop ue traffic
-            // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
-       
-            // ogs_warn("XXXXXX 2");
-            // strcpy(str, "iptables -t filter -D FORWARD -d ");
-            // strcat(str, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
-            // strcat(str, " -j DROP");
-            // ogs_warn("XXXXXX 43");
-            // ogs_warn("%s", str);
-            // system(str);
-            // ogs_warn("XXXXXX 211");
-            char str[100];
-            strcpy(str, "iptables -t filter -A FORWARD -d ");
-            strcat(str, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
-            strcat(str, " -j DROP");
-            ogs_warn("XXXXXX 4");
-            ogs_warn("%s", str);
-            system(str);
-            ogs_warn("XXXXXX 5");
+    } else {  
+        ogs_warn("XXXXXX volume quota in urr absent");
+        // forward drop traffic
+        // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
+        char buf1[OGS_ADDRSTRLEN];
+        char str[100];
+        strcpy(str, "iptables -t filter -D FORWARD -d ");
+        strcat(str, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
+        strcat(str, " -j DROP && iptables -t filter -A FORWARD -d ");
+        strcat(str, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
+        strcat(str, " -j DROP");
+        ogs_warn("%s", str);
+        system(str);
     }
 
 exit:
