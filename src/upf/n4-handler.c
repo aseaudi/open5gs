@@ -337,8 +337,8 @@ void upf_n4_handle_session_modification_request(
     volume_quota = urr.volume_quota;
     int16_t ret;
     ogs_warn("XXXXXX 1");
-    if (!volume_quota) goto exit;
-    ogs_warn("XXXXXX volume_quota");
+    // if (!volume_quota.data) goto exit;
+    // ogs_warn("XXXXXX volume_quota");
     if (!volume_quota.data) goto exit;
     ogs_warn("XXXXXX volume_quota.data");
     if (!req->create_urr) goto exit;
