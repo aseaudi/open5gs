@@ -212,7 +212,7 @@ uint32_t smf_gy_handle_cca_update_request(
     //         gy_message->cca.result_code);
     //     return gy_message->cca.err ? *gy_message->cca.err :
     //                                  ER_DIAMETER_AUTHENTICATION_REJECTED;
-    }
+    // }
 
     bearer = smf_default_bearer_in_sess(sess);
     ogs_assert(bearer);
