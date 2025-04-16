@@ -307,7 +307,7 @@ ogs_pfcp_urr_t * func1(ogs_pfcp_sess_t *sess,
         int16_t decoded;
         ogs_pfcp_urr_t *urr = NULL;
         urr = ogs_pfcp_urr_find(sess, message->urr_id.u32);
-        ogs_warn("XXXXXX yyy;")
+        ogs_warn("XXXXXX yyy;");
         if (message->volume_quota.presence &&
             (urr->meas_method & OGS_PFCP_MEASUREMENT_METHOD_VOLUME)) {
                 ogs_warn("XXXXXX zzz;")
