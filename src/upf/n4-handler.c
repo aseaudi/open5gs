@@ -332,7 +332,7 @@ void upf_n4_handle_session_modification_request(
 
     ogs_pfcp_volume_quota_t vol_quota;
     ogs_pfcp_tlv_volume_quota_t volume_quota;
-    volume_quota = req->update_urr[0];
+    volume_quota = *req->update_urr[0];
     int16_t ret;
     ogs_warn("XXXXXX 1");
     if (!volume_quota) goto exit;
