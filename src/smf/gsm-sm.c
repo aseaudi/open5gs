@@ -446,7 +446,7 @@ test_can_proceed:
         if (sess->sm_data.gy_cca_init_err != ER_DIAMETER_SUCCESS)
             diam_err = sess->sm_data.gy_cca_init_err;
 
-        if (diam_err == ER_DIAMETER_SUCCESS) {
+        if (diam_err == ER_DIAMETER_SUCCESS || diam_err == 4012) {
             OGS_FSM_TRAN(s, smf_gsm_state_wait_pfcp_establishment);
             ogs_assert(gtp_xact);
             ogs_assert(OGS_OK ==
