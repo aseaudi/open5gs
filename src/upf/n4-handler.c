@@ -353,7 +353,7 @@ void upf_n4_handle_session_modification_request(
     ogs_warn("XXXXXX upf_n4_handle_session_modification_request");
     
 
-    ogs_pfcp_volume_quota_t vol_quota;
+    // ogs_pfcp_volume_quota_t vol_quota;
     // ogs_pfcp_tlv_update_urr_t urr;
     // urr = req->update_urr[0];
     // ogs_pfcp_tlv_volume_quota_t volume_quota;
@@ -364,7 +364,7 @@ void upf_n4_handle_session_modification_request(
     // ogs_warn("XXXXXX volume_quota");
     // if (!volume_quota.presence) goto exit;
     // ogs_warn("XXXXXX volume_quota.presence");
-    func1(&sess->pfcp, &req->update_urr[i]);
+    func1(&sess->pfcp, &req->update_urr[0]);
     ogs_warn("XXXXXX 2");
     // if (ret == 0) goto exit;
     // if (vol_quota.total_volume == 1000) {
