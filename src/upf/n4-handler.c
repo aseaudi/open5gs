@@ -366,13 +366,17 @@ void upf_n4_handle_session_modification_request(
         // forward drop traffic
         // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
         char buf1[OGS_ADDRSTRLEN];
-        char str[100];
-        strcpy(str, "iptables -t filter -D FORWARD -d ");
-        strcat(str, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
-        strcat(str, " -j DROP && iptables -t filter -A FORWARD -d ");
-        strcat(str, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
-        strcat(str, " -j DROP");
-        ogs_warn("%s", str);
+        char str1[100];
+        strcpy(str1, "iptables -t filter -D FORWARD -d ");
+        strcat(str1, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
+        strcat(str1, " -j DROP")
+        ogs_warn("XXXXXX %s", str1);
+        char buf2[OGS_ADDRSTRLEN];
+        char str2[100];
+        strcpy(str2, "iptables -t filter -A FORWARD -d ");
+        strcat(str2, OGS_INET_NTOP(&sess->ipv4->addr, buf2));
+        strcat(str2, " -j DROP")               
+        ogs_warn("XXXXXX %s", str2);
         system(str);
     }
 
