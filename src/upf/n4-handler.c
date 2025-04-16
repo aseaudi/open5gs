@@ -313,8 +313,8 @@ ogs_pfcp_urr_t * func1(ogs_pfcp_sess_t *sess,
                 ogs_warn("XXXXXX zzz;");
             decoded = ogs_pfcp_parse_volume(
                     &urr->vol_quota, &message->volume_quota);
-            if(*urr->vol_quota.total_volume == 1000) 
-            ogs_wan("XXXXXX volquota = 1000");
+            if(urr->vol_quota.total_volume == 1000) 
+            ogs_warn("XXXXXX volquota = 1000");
             if (message->volume_quota.len != decoded) {
                 ogs_error("XXXXXX Invalid Volume Quota");                       
                 return NULL;
