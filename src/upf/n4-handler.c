@@ -356,7 +356,7 @@ void upf_n4_handle_session_modification_request(
     func1(&sess->pfcp, &req->update_urr[0]);
     ogs_warn("XXXXXX 2");
     // if (vol_quota.total_volume == 1000) {
-    if (!&req->update_urr[0]->volume_quota.presence) {
+    if (!req->update_urr[0]->volume_quota.presence) {
         ogs_warn("XXXXXX volume quota in urr present");
     // if (true){
         char buf1[OGS_ADDRSTRLEN];
