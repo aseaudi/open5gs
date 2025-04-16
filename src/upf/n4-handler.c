@@ -356,7 +356,7 @@ void upf_n4_handle_session_modification_request(
         // b = iota(sess->ipv4[1]);
         // c = iota(sess->ipv4->addr[2]);
         // d = iota(sess->ipv4->addr[3]);
-        ogs_debug("XXXXXX a.b.c.d %s.%s.%s.%s", a, b, c, d);
+        ogs_warn("XXXXXX a.b.c.d %s.%s.%s.%s", a, b, c, d);
         ogs_warn("XXXXXX 3");
 
         char str[80];
@@ -386,7 +386,7 @@ void upf_n4_handle_session_modification_request(
         // b = iota(sess->ipv4[1]);
         // c = iota(sess->ipv4[2]);
         // d = iota(sess->ipv4[3]);
-        ogs_debug("XXXXXX a.b.c.d %s.%s.%s.%s", a, b, c, d);
+        ogs_warn("XXXXXX a.b.c.d %s.%s.%s.%s", a, b, c, d);
         char str[80];
         strcpy(str, "iptables -t filter -D FORWARD ");
         strcat(str, a);
