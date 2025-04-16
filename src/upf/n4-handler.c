@@ -331,15 +331,20 @@ void upf_n4_handle_session_modification_request(
     
 
     ogs_pfcp_volume_quota_t vol_quota;
-
+    ogs_pfcp_tlv_volume_quota_t volume_quota;
+    volume_quota = req->update_urr[0];
     int16_t ret;
     ogs_warn("XXXXXX 1");
+    if (!volume_quota) goto exit;
+    ogs_warn("XXXXXX volume_quota");
+    if (!volume_quota.data) goto exit;
+    ogs_warn("XXXXXX volume_quota.data");
     if (!req->create_urr) goto exit;
     ogs_warn("XXXXXX create_urr");
     if (!req->update_urr) goto exit;
     ogs_warn("XXXXXX update_urr");
     ret = ogs_pfcp_parse_volume(
-        &vol_quota, &req->update_urr[0]->volume_quota);
+        &vol_quota, &volume_quota);
     ogs_warn("XXXXXX 2");
     if (ret == 0) goto exit;
     if (vol_quota.total_volume == 1000) {
