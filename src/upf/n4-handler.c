@@ -370,7 +370,7 @@ exit:
     num_of_created_pdr = i;
     if (cause_value != OGS_PFCP_CAUSE_REQUEST_ACCEPTED)
         goto cleanup;
-
+    ogs_warn("XXXXXX upf_n4_handle_session_modification_request 111");
     for (i = 0; i < OGS_MAX_NUM_OF_PDR; i++) {
         if (ogs_pfcp_handle_update_pdr(&sess->pfcp, &req->update_pdr[i],
                     &cause_value, &offending_ie_value) == NULL)
@@ -378,7 +378,7 @@ exit:
     }
     if (cause_value != OGS_PFCP_CAUSE_REQUEST_ACCEPTED)
         goto cleanup;
-
+        ogs_warn("XXXXXX upf_n4_handle_session_modification_request 222");
     for (i = 0; i < OGS_MAX_NUM_OF_PDR; i++) {
         if (ogs_pfcp_handle_remove_pdr(&sess->pfcp, &req->remove_pdr[i],
                 &cause_value, &offending_ie_value) == false)
@@ -402,7 +402,7 @@ exit:
     }
     if (cause_value != OGS_PFCP_CAUSE_REQUEST_ACCEPTED)
         goto cleanup;
-
+        ogs_warn("XXXXXX upf_n4_handle_session_modification_request 444");
     /* Send End Marker to gNB */
     ogs_list_for_each(&sess->pfcp.pdr_list, pdr) {
         if (pdr->src_if == OGS_PFCP_INTERFACE_CORE) { /* Downlink */
@@ -434,7 +434,7 @@ exit:
     upf_n4_handle_create_urr(sess, &req->create_urr[0], &cause_value, &offending_ie_value);
     if (cause_value != OGS_PFCP_CAUSE_REQUEST_ACCEPTED)
         goto cleanup;
-
+        ogs_warn("XXXXXX upf_n4_handle_session_modification_request 555");
     for (i = 0; i < OGS_MAX_NUM_OF_URR; i++) {
         if (ogs_pfcp_handle_update_urr(&sess->pfcp, &req->update_urr[i],
                     &cause_value, &offending_ie_value) == NULL)
