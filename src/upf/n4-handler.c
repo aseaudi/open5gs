@@ -356,7 +356,7 @@ void upf_n4_handle_session_modification_request(
     func1(&sess->pfcp, &req->update_urr[0]);
     ogs_warn("XXXXXX 2");
     // if (vol_quota.total_volume == 1000) {
-    if (&req->update_urr[0]->volume_quota.presence) {
+    if (!&req->update_urr[0]->volume_quota.presence) {
         ogs_warn("XXXXXX volume quota in urr present");
     // if (true){
         char buf1[OGS_ADDRSTRLEN];
@@ -364,14 +364,14 @@ void upf_n4_handle_session_modification_request(
         // drop ue traffic
         // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
    
-        ogs_warn("XXXXXX 2");
-        strcpy(str, "iptables -t filter -D FORWARD -d ");
-        strcat(str, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
-        strcat(str, " -j DROP");
-        ogs_warn("XXXXXX 43");
-        ogs_warn("%s", str);
-        system(str);
-        ogs_warn("XXXXXX 211");
+        // ogs_warn("XXXXXX 2");
+        // strcpy(str, "iptables -t filter -D FORWARD -d ");
+        // strcat(str, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
+        // strcat(str, " -j DROP");
+        // ogs_warn("XXXXXX 43");
+        // ogs_warn("%s", str);
+        // system(str);
+        // ogs_warn("XXXXXX 211");
         char str[100];
         strcpy(str, "iptables -t filter -A FORWARD -d ");
         strcat(str, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
