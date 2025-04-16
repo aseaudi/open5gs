@@ -1463,6 +1463,7 @@ ogs_pfcp_urr_t *ogs_pfcp_handle_update_urr(ogs_pfcp_sess_t *sess,
         ogs_pfcp_tlv_update_urr_t *message,
         uint8_t *cause_value, uint8_t *offending_ie_value)
 {
+    ogs_warn("ogs_pfcp_handle_update_urr");
     int16_t decoded;
     ogs_pfcp_urr_t *urr = NULL;
 
