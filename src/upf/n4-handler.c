@@ -356,14 +356,22 @@ void upf_n4_handle_session_modification_request(
     func1(&sess->pfcp, &req->update_urr[0]);
     ogs_warn("XXXXXX 2");
     // if (vol_quota.total_volume == 1000) {
-    if (true){
+    if (&req->update_urr[0]->volume_quota.presence) {
+        ogs_warn("XXXXXX volume quota in urr present");
+    // if (true){
         char buf1[OGS_ADDRSTRLEN];
         ogs_warn("XXXXXX 3");
         // drop ue traffic
         // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
    
         ogs_warn("XXXXXX 2");
-
+        strcpy(str, "iptables -t filter -D FORWARD -d ");
+        strcat(str, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
+        strcat(str, " -j DROP");
+        ogs_warn("XXXXXX 43");
+        ogs_warn("%s", str);
+        system(str);
+        ogs_warn("XXXXXX 211");
         char str[100];
         strcpy(str, "iptables -t filter -A FORWARD -d ");
         strcat(str, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
@@ -376,26 +384,23 @@ void upf_n4_handle_session_modification_request(
     } else {
         // forward ue traffic
         // iptables -t filter -D FORWARD -s 1.2.3.4 -j DROP
-        char a[4],b[4],c[4],d[4];
-        sprintf(a, "%d", sess->ipv4->addr[0]);
-        sprintf(b, "%d", sess->ipv4->addr[1]);
-        sprintf(c, "%d", sess->ipv4->addr[2]);
-        sprintf(d, "%d", sess->ipv4->addr[3]);
-        // a = itoa(sess->ipv4[0]);
-        // b = iota(sess->ipv4[1]);
-        // c = iota(sess->ipv4[2]);
-        // d = iota(sess->ipv4[3]);
-        ogs_warn("XXXXXX a.b.c.d %s.%s.%s.%s", a, b, c, d);
-        char str[80];
-        strcpy(str, "iptables -t filter -D FORWARD ");
-        strcat(str, a);
-        strcat(str, ".");
-        strcat(str, b);
-        strcat(str, ".");
-        strcat(str, c);
-        strcat(str, ".");
-        strcat(str, d);
+        ogs_warn("XXXXXX volume quota in urr absent");
+
+        char buf1[OGS_ADDRSTRLEN];
+        ogs_warn("XXXXXX 33");
+        // drop ue traffic
+        // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
+   
+        ogs_warn("XXXXXX 22");
+
+        char str[100];
+        strcpy(str, "iptables -t filter -D FORWARD -d ");
+        strcat(str, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
+        strcat(str, " -j DROP");
+        ogs_warn("XXXXXX 43");
+        ogs_warn("%s", str);
         system(str);
+        ogs_warn("XXXXXX 54");
     }
 
 exit:
