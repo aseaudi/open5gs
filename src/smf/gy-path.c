@@ -1185,6 +1185,13 @@ static void smf_gy_cca_cb(void *data, struct msg **msg)
                 }
                 fd_msg_browse(avpch1, MSG_BRW_NEXT, &avpch1, NULL);
             }
+            // if no credit left, force 1 minute timer to ask again for balance recharge
+            if (gy_message->result_code == 4012) {
+                ogs_diam_gy_service_unit_t *su;
+                su = &gy_message->cca.granted;
+                su->cc_time_present = true;
+                su->cc_time = 60;
+            }
             break;
         default:
             ogs_warn("Not supported(%d)", hdr->avp_code);
