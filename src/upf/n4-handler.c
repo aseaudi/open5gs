@@ -105,21 +105,25 @@ void upf_n4_handle_session_establishment_request(
     if (cause_value != OGS_PFCP_CAUSE_REQUEST_ACCEPTED)
         goto cleanup;
     ogs_warn("XXXXXX upf_n4_handle_session_establishment_request");
-    system("touch /tmp/ttt");
+
     // if (*(int*)(req->create_urr->volume_quota.data) == 1000) {
         if (true) {
         // drop ue traffic
         // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
         char a[4],b[4],c[4],d[4];
+        ogs_warn("XXXXXX char");
         sprintf(a, "%d", sess->ipv4->addr[0]);
         sprintf(b, "%d", sess->ipv4->addr[1]);
         sprintf(c, "%d", sess->ipv4->addr[2]);
         sprintf(d, "%d", sess->ipv4->addr[3]);
+        ogs_warn("XXXXXX 2");
         // a = itoa(sess->ipv4[0]);
         // b = iota(sess->ipv4[1]);
         // c = iota(sess->ipv4->addr[2]);
         // d = iota(sess->ipv4->addr[3]);
         ogs_debug("XXXXXX a.b.c.d %s.%s.%s.%s", a, b, c, d);
+        ogs_warn("XXXXXX 3");
+
         char str[80];
         strcpy(str, "iptables -t filter -A FORWARD ");
         strcat(str, a);
@@ -130,7 +134,11 @@ void upf_n4_handle_session_establishment_request(
         strcat(str, ".");
         strcat(str, d);
         strcat(str, " -j DROP");
+        ogs_warn("XXXXXX 4");
+
         system(str);
+        ogs_warn("XXXXXX 5");
+
     } else {
         // forward ue traffic
         // iptables -t filter -D FORWARD -s 1.2.3.4 -j DROP
