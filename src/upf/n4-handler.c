@@ -26,7 +26,7 @@
 static void upf_n4_handle_create_urr(upf_sess_t *sess, ogs_pfcp_tlv_create_urr_t *create_urr_arr,
                               uint8_t *cause_value, uint8_t *offending_ie_value)
 {
-    ogs_warm("upf_n4_handle_create_urr");
+    ogs_warn("upf_n4_handle_create_urr");
     int i;
     ogs_pfcp_urr_t *urr;
 
