@@ -403,7 +403,7 @@ exit:
     for (i = 0; i < OGS_MAX_NUM_OF_URR; i++) {
         if (ogs_pfcp_handle_update_urr(&sess->pfcp, &req->update_urr[i],
                     &cause_value, &offending_ie_value) == NULL){
-            upf_sess_urr_acc_timers_setup(sess, urr);        
+            upf_sess_urr_acc_timers_setup(sess, req->update_urr[i]);        
             break;
                     }
     }
