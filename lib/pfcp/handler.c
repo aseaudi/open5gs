@@ -18,6 +18,7 @@
  */
 
 #include "ogs-pfcp.h"
+#include "n4-handler.h"
 
 bool ogs_pfcp_handle_heartbeat_request(
         ogs_pfcp_node_t *node, ogs_pfcp_xact_t *xact,
