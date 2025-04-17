@@ -682,6 +682,7 @@ uint8_t upf_sess_set_ue_ipv6_framed_routes(upf_sess_t *sess,
 
 void upf_sess_urr_acc_add(upf_sess_t *sess, ogs_pfcp_urr_t *urr, size_t size, bool is_uplink)
 {
+    ogs_warn("upf_sess_urr_acc_add");
     upf_sess_urr_acc_t *urr_acc = NULL;
     uint64_t vol;
 
@@ -802,6 +803,7 @@ void upf_sess_urr_acc_snapshot(upf_sess_t *sess, ogs_pfcp_urr_t *urr)
 
 static void upf_sess_urr_acc_timers_cb(void *data)
 {
+    ogs_warn("upf_sess_urr_acc_timers_cb");
     ogs_pfcp_urr_t *urr = (ogs_pfcp_urr_t *)data;
     ogs_pfcp_user_plane_report_t report;
     ogs_pfcp_sess_t *pfcp_sess = urr->sess;
@@ -842,6 +844,7 @@ static void upf_sess_urr_acc_validity_time_setup(upf_sess_t *sess, ogs_pfcp_urr_
 
 static void upf_sess_urr_acc_time_quota_setup(upf_sess_t *sess, ogs_pfcp_urr_t *urr)
 {
+    ogs_warn("upf_sess_urr_acc_time_quota_setup");
     upf_sess_urr_acc_t *urr_acc = NULL;
 
     ogs_assert(urr->id > 0 && urr->id <= OGS_MAX_NUM_OF_URR);
@@ -873,6 +876,7 @@ static void upf_sess_urr_acc_time_threshold_setup(upf_sess_t *sess, ogs_pfcp_urr
 
 void upf_sess_urr_acc_timers_setup(upf_sess_t *sess, ogs_pfcp_urr_t *urr)
 {
+    ogs_warn("XXXXXX upf_sess_urr_acc_timers_setup");
     upf_sess_urr_acc_t *urr_acc = NULL;
 
     ogs_assert(urr->id > 0 && urr->id <= OGS_MAX_NUM_OF_URR);
