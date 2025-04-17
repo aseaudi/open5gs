@@ -401,7 +401,8 @@ exit:
     if (cause_value != OGS_PFCP_CAUSE_REQUEST_ACCEPTED)
         goto cleanup;
     for (i = 0; i < OGS_MAX_NUM_OF_URR; i++) {
-        ogs_pfcp_urr_t urr1 = ogs_pfcp_handle_update_urr(&sess->pfcp, &req->update_urr[i],
+        ogs_pfcp_urr_t * urr1;
+        urr1 = ogs_pfcp_handle_update_urr(&sess->pfcp, &req->update_urr[i],
             &cause_value, &offending_ie_value);
         if (urr1) == NULL) break;
         upf_sess_urr_acc_timers_setup(sess, urr1);
