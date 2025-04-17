@@ -116,6 +116,12 @@ static void urr_update_time(smf_sess_t *sess, ogs_pfcp_urr_t *urr, ogs_diam_gy_m
         urr->rep_triggers.time_threshold = 0;
         urr->time_threshold = 0;
     }
+
+    // if no credit left, force urr after 1 minute, to check if recharge balance
+    if (gy_message->result_code == 4012 || gy_message->result_code == 5031 || gy_message->result_code == 5004) {
+        urr->rep_triggers.time_quota = 1;
+        urr->time_quota = 60;       
+    }
 }
 
 /* Returns ER_DIAMETER_SUCCESS on success, Diameter error code on failue.
@@ -138,21 +144,21 @@ uint32_t smf_gy_handle_cca_initial_request(
             sess->sgw_s5c_teid, sess->smf_n4_teid);
 
     *need_termination = false;
-    if (gy_message->result_code != ER_DIAMETER_SUCCESS) {
-        ogs_warn("Gy CCA Initial Diameter failure: res=%u",
-            gy_message->result_code);
-        return gy_message->err ? *gy_message->err :
-                                 ER_DIAMETER_AUTHENTICATION_REJECTED;
-    }
-    if (gy_message->cca.result_code != ER_DIAMETER_SUCCESS) {
-        ogs_warn("Gy CCA Initial Diameter Multiple-Services-Credit-Control Result-Code=%u",
-            gy_message->cca.result_code);
-        /* Message RC was successful but MSCC was rejected. The session needs to
-         * be tear down through CCR-T: */
-        *need_termination = true;
-        return gy_message->cca.err ? *gy_message->cca.err :
-                                     ER_DIAMETER_AUTHENTICATION_REJECTED;
-    }
+    // if (gy_message->result_code != ER_DIAMETER_SUCCESS) {
+    //     ogs_warn("Gy CCA Initial Diameter failure: res=%u",
+    //         gy_message->result_code);
+    //     return gy_message->err ? *gy_message->err :
+    //                              ER_DIAMETER_AUTHENTICATION_REJECTED;
+    // }
+    // if (gy_message->cca.result_code != ER_DIAMETER_SUCCESS) {
+    //     ogs_warn("Gy CCA Initial Diameter Multiple-Services-Credit-Control Result-Code=%u",
+    //         gy_message->cca.result_code);
+    //     /* Message RC was successful but MSCC was rejected. The session needs to
+    //      * be tear down through CCR-T: */
+    //     *need_termination = true;
+    //     return gy_message->cca.err ? *gy_message->cca.err :
+    //                                  ER_DIAMETER_AUTHENTICATION_REJECTED;
+    // }
 
     bearer = smf_default_bearer_in_sess(sess);
     ogs_assert(bearer);
@@ -195,18 +201,18 @@ uint32_t smf_gy_handle_cca_update_request(
     ogs_debug("    SGW_S5C_TEID[0x%x] PGW_S5C_TEID[0x%x]",
             sess->sgw_s5c_teid, sess->smf_n4_teid);
 
-    if (gy_message->result_code != ER_DIAMETER_SUCCESS) {
-        ogs_warn("Gy CCA Update Diameter failure: Result-Code=%u",
-            gy_message->result_code);
-        return gy_message->err ? *gy_message->err :
-                                 ER_DIAMETER_AUTHENTICATION_REJECTED;
-    }
-    if (gy_message->cca.result_code != ER_DIAMETER_SUCCESS) {
-        ogs_warn("Gy CCA Update Diameter Multiple-Services-Credit-Control Result-Code=%u",
-            gy_message->cca.result_code);
-        return gy_message->cca.err ? *gy_message->cca.err :
-                                     ER_DIAMETER_AUTHENTICATION_REJECTED;
-    }
+    // if (gy_message->result_code != ER_DIAMETER_SUCCESS) {
+    //     ogs_warn("Gy CCA Update Diameter failure: Result-Code=%u",
+    //         gy_message->result_code);
+    //     return gy_message->err ? *gy_message->err :
+    //                              ER_DIAMETER_AUTHENTICATION_REJECTED;
+    // }
+    // if (gy_message->cca.result_code != ER_DIAMETER_SUCCESS) {
+    //     ogs_warn("Gy CCA Update Diameter Multiple-Services-Credit-Control Result-Code=%u",
+    //         gy_message->cca.result_code);
+    //     return gy_message->cca.err ? *gy_message->cca.err :
+    //                                  ER_DIAMETER_AUTHENTICATION_REJECTED;
+    // }
 
     bearer = smf_default_bearer_in_sess(sess);
     ogs_assert(bearer);
@@ -241,6 +247,9 @@ uint32_t smf_gy_handle_cca_update_request(
         modify_flags |= OGS_PFCP_MODIFY_URR_QUOTA_VALIDITY_TIME;
 
     if (urr->time_quota != prev_time_quota)
+        modify_flags |= OGS_PFCP_MODIFY_URR_TIME_QUOTA;
+
+    if (urr->time_quota)
         modify_flags |= OGS_PFCP_MODIFY_URR_TIME_QUOTA;
 
     if (urr->vol_quota.tovol || urr->vol_quota.total_volume)

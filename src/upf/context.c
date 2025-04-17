@@ -846,7 +846,7 @@ static void upf_sess_urr_acc_time_quota_setup(upf_sess_t *sess, ogs_pfcp_urr_t *
 
     ogs_assert(urr->id > 0 && urr->id <= OGS_MAX_NUM_OF_URR);
     urr_acc = &sess->urr_acc[urr->id-1];
-
+    ogs_warn("XXXXXX Installing URR Time Quota timer");
     ogs_debug("Installing URR Time Quota timer");
     urr_acc->reporting_enabled = true;
     if (!urr_acc->t_time_quota)

@@ -1119,7 +1119,8 @@ static void smf_gy_cca_cb(void *data, struct msg **msg)
 
     if (gy_message->result_code != ER_DIAMETER_SUCCESS) {
         ogs_warn("ERROR DIAMETER Result Code(%d)", gy_message->result_code);
-        goto out;
+        // don't exit yet and delete bearer, maybe it is 4012 credit needs recharge
+        // goto out;
     }
 
     ret = fd_msg_browse(*msg, MSG_BRW_FIRST_CHILD, &avp, NULL);
@@ -1183,6 +1184,13 @@ static void smf_gy_cca_cb(void *data, struct msg **msg)
                     break;
                 }
                 fd_msg_browse(avpch1, MSG_BRW_NEXT, &avpch1, NULL);
+            }
+            // if no credit left, force 1 minute timer to ask again for balance recharge
+            if (gy_message->result_code == 4012) {
+                ogs_diam_gy_service_unit_t *su;
+                su = &gy_message->cca.granted;
+                su->cc_time_present = true;
+                su->cc_time = 60;
             }
             break;
         default:

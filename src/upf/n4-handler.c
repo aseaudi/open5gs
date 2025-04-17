@@ -16,7 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
+#include <stdio.h>
+#include <stdlib.h>
 #include "context.h"
 #include "pfcp-path.h"
 #include "gtp-path.h"
@@ -103,7 +104,73 @@ void upf_n4_handle_session_establishment_request(
     upf_n4_handle_create_urr(sess, &req->create_urr[0], &cause_value, &offending_ie_value);
     if (cause_value != OGS_PFCP_CAUSE_REQUEST_ACCEPTED)
         goto cleanup;
+    ogs_warn("XXXXXX upf_n4_handle_session_establishment_request");
 
+    // if (*(int*)(req->create_urr->volume_quota.data) == 1000) {
+        if (true) {
+            // drop ue traffic
+            // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
+            char a[5],b[5],c[5],d[5];
+            ogs_warn("XXXXXX char");
+            if (sess->ipv4) {
+                ogs_warn("XXXXXX if (sess->ipv4) ");
+                sprintf(a, "%d", sess->ipv4->addr[0]);
+                sprintf(b, "%d", sess->ipv4->addr[1]);
+                sprintf(c, "%d", sess->ipv4->addr[2]);
+                sprintf(d, "%d", sess->ipv4->addr[3]);
+            } else {
+                ogs_warn("XXXXXX exit");
+                goto exit;
+            }
+            ogs_warn("XXXXXX 2");
+            // a = itoa(sess->ipv4[0]);
+            // b = iota(sess->ipv4[1]);
+            // c = iota(sess->ipv4->addr[2]);
+            // d = iota(sess->ipv4->addr[3]);
+            ogs_debug("XXXXXX a.b.c.d %s.%s.%s.%s", a, b, c, d);
+            ogs_warn("XXXXXX 3");
+    
+            char str[80];
+            strcpy(str, "iptables -t filter -A FORWARD ");
+            strcat(str, a);
+            strcat(str, ".");
+            strcat(str, b);
+            strcat(str, ".");
+            strcat(str, c);
+            strcat(str, ".");
+            strcat(str, d);
+            strcat(str, " -j DROP");
+            ogs_warn("XXXXXX 4");
+    
+            system(str);
+            ogs_warn("XXXXXX 5");
+    
+        } else {
+            // forward ue traffic
+            // iptables -t filter -D FORWARD -s 1.2.3.4 -j DROP
+            char a[4],b[4],c[4],d[4];
+            sprintf(a, "%d", sess->ipv4->addr[0]);
+            sprintf(b, "%d", sess->ipv4->addr[1]);
+            sprintf(c, "%d", sess->ipv4->addr[2]);
+            sprintf(d, "%d", sess->ipv4->addr[3]);
+            // a = itoa(sess->ipv4[0]);
+            // b = iota(sess->ipv4[1]);
+            // c = iota(sess->ipv4[2]);
+            // d = iota(sess->ipv4[3]);
+            ogs_debug("XXXXXX a.b.c.d %s.%s.%s.%s", a, b, c, d);
+            char str[80];
+            strcpy(str, "iptables -t filter -D FORWARD ");
+            strcat(str, a);
+            strcat(str, ".");
+            strcat(str, b);
+            strcat(str, ".");
+            strcat(str, c);
+            strcat(str, ".");
+            strcat(str, d);
+            system(str);
+        }
+    
+    exit:
     if (req->apn_dnn.presence) {
         char apn_dnn[OGS_MAX_DNN_LEN+1];
 
@@ -260,6 +327,40 @@ void upf_n4_handle_session_modification_request(
         return;
     }
 
+    ogs_warn("XXXXXX upf_n4_handle_session_modification_request");
+    
+    if (req->update_urr[0].volume_quota.presence) {
+        ogs_warn("XXXXXX volume quota in urr present");
+        // forward ue traffic
+        // iptables -t filter -D FORWARD -s 1.2.3.4 -j DROP
+        char buf1[OGS_ADDRSTRLEN];
+        char str[100];
+        strcpy(str, "iptables -t filter -D FORWARD -d ");
+        strcat(str, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
+        strcat(str, " -j DROP");
+        ogs_warn("%s", str);
+        system(str);
+    } else {  
+        ogs_warn("XXXXXX volume quota in urr absent");
+        // forward drop traffic
+        // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
+        char buf1[OGS_ADDRSTRLEN];
+        char str1[100];
+        strcpy(str1, "iptables -t filter -D FORWARD -d ");
+        strcat(str1, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
+        strcat(str1, " -j DROP");
+        ogs_warn("XXXXXX %s", str1);
+        system(str1);
+        char buf2[OGS_ADDRSTRLEN];
+        char str2[100];
+        strcpy(str2, "iptables -t filter -A FORWARD -d ");
+        strcat(str2, OGS_INET_NTOP(&sess->ipv4->addr, buf2));
+        strcat(str2, " -j DROP");        
+        ogs_warn("XXXXXX %s", str2);
+        system(str2);
+    }
+
+exit:
     for (i = 0; i < OGS_MAX_NUM_OF_PDR; i++) {
         created_pdr[i] = ogs_pfcp_handle_create_pdr(&sess->pfcp,
                 &req->create_pdr[i], NULL, &cause_value, &offending_ie_value);
@@ -269,7 +370,7 @@ void upf_n4_handle_session_modification_request(
     num_of_created_pdr = i;
     if (cause_value != OGS_PFCP_CAUSE_REQUEST_ACCEPTED)
         goto cleanup;
-
+    ogs_warn("XXXXXX upf_n4_handle_session_modification_request 111");
     for (i = 0; i < OGS_MAX_NUM_OF_PDR; i++) {
         if (ogs_pfcp_handle_update_pdr(&sess->pfcp, &req->update_pdr[i],
                     &cause_value, &offending_ie_value) == NULL)
@@ -277,7 +378,7 @@ void upf_n4_handle_session_modification_request(
     }
     if (cause_value != OGS_PFCP_CAUSE_REQUEST_ACCEPTED)
         goto cleanup;
-
+        ogs_warn("XXXXXX upf_n4_handle_session_modification_request 222");
     for (i = 0; i < OGS_MAX_NUM_OF_PDR; i++) {
         if (ogs_pfcp_handle_remove_pdr(&sess->pfcp, &req->remove_pdr[i],
                 &cause_value, &offending_ie_value) == false)
@@ -301,7 +402,7 @@ void upf_n4_handle_session_modification_request(
     }
     if (cause_value != OGS_PFCP_CAUSE_REQUEST_ACCEPTED)
         goto cleanup;
-
+        ogs_warn("XXXXXX upf_n4_handle_session_modification_request 444");
     /* Send End Marker to gNB */
     ogs_list_for_each(&sess->pfcp.pdr_list, pdr) {
         if (pdr->src_if == OGS_PFCP_INTERFACE_CORE) { /* Downlink */
@@ -333,7 +434,7 @@ void upf_n4_handle_session_modification_request(
     upf_n4_handle_create_urr(sess, &req->create_urr[0], &cause_value, &offending_ie_value);
     if (cause_value != OGS_PFCP_CAUSE_REQUEST_ACCEPTED)
         goto cleanup;
-
+        ogs_warn("XXXXXX upf_n4_handle_session_modification_request 555");
     for (i = 0; i < OGS_MAX_NUM_OF_URR; i++) {
         if (ogs_pfcp_handle_update_urr(&sess->pfcp, &req->update_urr[i],
                     &cause_value, &offending_ie_value) == NULL)
@@ -341,7 +442,7 @@ void upf_n4_handle_session_modification_request(
     }
     if (cause_value != OGS_PFCP_CAUSE_REQUEST_ACCEPTED)
         goto cleanup;
-
+        ogs_warn("XXXXXX upf_n4_handle_session_modification_request 666");
     for (i = 0; i < OGS_MAX_NUM_OF_URR; i++) {
         if (ogs_pfcp_handle_remove_urr(&sess->pfcp, &req->remove_urr[i],
                 &cause_value, &offending_ie_value) == false)
@@ -349,7 +450,7 @@ void upf_n4_handle_session_modification_request(
     }
     if (cause_value != OGS_PFCP_CAUSE_REQUEST_ACCEPTED)
         goto cleanup;
-
+        ogs_warn("XXXXXX upf_n4_handle_session_modification_request 777");
     for (i = 0; i < OGS_MAX_NUM_OF_QER; i++) {
         if (ogs_pfcp_handle_create_qer(&sess->pfcp, &req->create_qer[i],
                     &cause_value, &offending_ie_value) == NULL)
