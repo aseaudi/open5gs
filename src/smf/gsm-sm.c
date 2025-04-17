@@ -443,8 +443,8 @@ test_can_proceed:
             diam_err = sess->sm_data.s6b_aaa_err;
         if (sess->sm_data.gx_cca_init_err != ER_DIAMETER_SUCCESS)
             diam_err = sess->sm_data.gx_cca_init_err;
-        // if (sess->sm_data.gy_cca_init_err != ER_DIAMETER_SUCCESS)
-        //     diam_err = sess->sm_data.gy_cca_init_err;
+        if (sess->sm_data.gy_cca_init_err != ER_DIAMETER_SUCCESS && sess->sm_data.gy_cca_init_err != 4012)
+            diam_err = sess->sm_data.gy_cca_init_err;
 
         if (diam_err == ER_DIAMETER_SUCCESS || diam_err == 4012) {
             OGS_FSM_TRAN(s, smf_gsm_state_wait_pfcp_establishment);
@@ -935,7 +935,7 @@ void smf_gsm_state_operational(ogs_fsm_t *s, smf_event_t *e)
                 diam_err = smf_gy_handle_cca_update_request(
                         sess, gy_message, pfcp_xact);
                 // if no credit keep session up and stop downloading until recharge balance
-                if (gy_message->result_code == 4012)
+                if (gy_message->result_code == 4012 || gy_message->result_code == 5031)
                     break;
                 if (diam_err != ER_DIAMETER_SUCCESS)
                     OGS_FSM_TRAN(s, smf_gsm_state_wait_pfcp_deletion);
