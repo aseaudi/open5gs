@@ -107,47 +107,35 @@ void upf_n4_handle_session_establishment_request(
     ogs_warn("XXXXXX upf_n4_handle_session_establishment_request");
 
     if (req->create_urr[0].volume_quota.presence) {
-        // drop ue traffic
-        // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
-        char a[5],b[5],c[5],d[5];
-        if (sess->ipv4) {
-            sprintf(a, "%d", sess->ipv4->addr[0]);
-            sprintf(b, "%d", sess->ipv4->addr[1]);
-            sprintf(c, "%d", sess->ipv4->addr[2]);
-            sprintf(d, "%d", sess->ipv4->addr[3]);
-        } else {
-            goto exit;
-        }
-        char str[80];
-        strcpy(str, "iptables -t filter -A FORWARD ");
-        strcat(str, a);
-        strcat(str, ".");
-        strcat(str, b);
-        strcat(str, ".");
-        strcat(str, c);
-        strcat(str, ".");
-        strcat(str, d);
-        strcat(str, " -j DROP");    
-        system(str);    
-    } else {
+        ogs_warn("XXXXXX volume quota in urr ***PRESENT***");
         // forward ue traffic
         // iptables -t filter -D FORWARD -s 1.2.3.4 -j DROP
-        char a[4],b[4],c[4],d[4];
-        sprintf(a, "%d", sess->ipv4->addr[0]);
-        sprintf(b, "%d", sess->ipv4->addr[1]);
-        sprintf(c, "%d", sess->ipv4->addr[2]);
-        sprintf(d, "%d", sess->ipv4->addr[3]);
-        char str[80];
-        strcpy(str, "iptables -t filter -D FORWARD ");
-        strcat(str, a);
-        strcat(str, ".");
-        strcat(str, b);
-        strcat(str, ".");
-        strcat(str, c);
-        strcat(str, ".");
-        strcat(str, d);
+        char buf1[OGS_ADDRSTRLEN];
+        char str[100];
+        strcpy(str, "iptables -t filter -D FORWARD -d ");
+        strcat(str, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
+        strcat(str, " -j DROP");
+        ogs_warn("%s", str);
         system(str);
-    }    
+    } else {  
+        ogs_warn("XXXXXX volume quota in urr ***ABSENT***");
+        // forward drop traffic
+        // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
+        char buf1[OGS_ADDRSTRLEN];
+        char str1[100];
+        strcpy(str1, "iptables -t filter -D FORWARD -d ");
+        strcat(str1, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
+        strcat(str1, " -j DROP");
+        ogs_warn("XXXXXX %s", str1);
+        system(str1);
+        char buf2[OGS_ADDRSTRLEN];
+        char str2[100];
+        strcpy(str2, "iptables -t filter -A FORWARD -d ");
+        strcat(str2, OGS_INET_NTOP(&sess->ipv4->addr, buf2));
+        strcat(str2, " -j DROP");        
+        ogs_warn("XXXXXX %s", str2);
+        system(str2);
+    }
 exit:
     if (req->apn_dnn.presence) {
         char apn_dnn[OGS_MAX_DNN_LEN+1];
