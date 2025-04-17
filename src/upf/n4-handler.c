@@ -402,8 +402,10 @@ exit:
         goto cleanup;
     for (i = 0; i < OGS_MAX_NUM_OF_URR; i++) {
         if (ogs_pfcp_handle_update_urr(&sess->pfcp, &req->update_urr[i],
-                    &cause_value, &offending_ie_value) == NULL)
+                    &cause_value, &offending_ie_value) == NULL){
+            upf_sess_urr_acc_timers_setup(sess, urr);        
             break;
+                    }
     }
     if (cause_value != OGS_PFCP_CAUSE_REQUEST_ACCEPTED)
         goto cleanup;

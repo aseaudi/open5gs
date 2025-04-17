@@ -18,7 +18,6 @@
  */
 
 #include "ogs-pfcp.h"
-#include "n4-handler.h"
 
 bool ogs_pfcp_handle_heartbeat_request(
         ogs_pfcp_node_t *node, ogs_pfcp_xact_t *xact,
@@ -1544,7 +1543,6 @@ ogs_pfcp_urr_t *ogs_pfcp_handle_update_urr(ogs_pfcp_sess_t *sess,
     if (message->time_quota.presence &&
         (urr->meas_method & OGS_PFCP_MEASUREMENT_METHOD_DURATION)) {
         urr->time_quota = message->time_quota.u32;
-        upf_sess_urr_acc_timers_setup(sess, urr);
     }
 
 
