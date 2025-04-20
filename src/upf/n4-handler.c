@@ -107,39 +107,6 @@ void upf_n4_handle_session_establishment_request(
         goto cleanup;
     ogs_warn("XXXXXX upf_n4_handle_session_establishment_request");
 
-    if (!sess->ipv4) goto exit; 
-
-    if (req->create_urr[0].volume_quota.presence) {
-        ogs_warn("XXXXXX volume quota in urr ***PRESENT***");
-        // forward ue traffic
-        // iptables -t filter -D FORWARD -s 1.2.3.4 -j DROP
-        char buf1[OGS_ADDRSTRLEN];
-        char str[100];
-        strcpy(str, "iptables -t filter -D FORWARD -d ");
-        strcat(str, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
-        strcat(str, " -j DROP");
-        ogs_warn("%s", str);
-        system(str);
-    } else {  
-        ogs_warn("XXXXXX volume quota in urr ***ABSENT***");
-        // forward drop traffic
-        // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
-        char buf1[OGS_ADDRSTRLEN];
-        char str1[100];
-        strcpy(str1, "iptables -t filter -D FORWARD -d ");
-        strcat(str1, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
-        strcat(str1, " -j DROP");
-        ogs_warn("XXXXXX %s", str1);
-        system(str1);
-        char buf2[OGS_ADDRSTRLEN];
-        char str2[100];
-        strcpy(str2, "iptables -t filter -A FORWARD -d ");
-        strcat(str2, OGS_INET_NTOP(&sess->ipv4->addr, buf2));
-        strcat(str2, " -j DROP");        
-        ogs_warn("XXXXXX %s", str2);
-        system(str2);
-    }
-exit:
     if (req->apn_dnn.presence) {
         char apn_dnn[OGS_MAX_DNN_LEN+1];
 
@@ -257,6 +224,40 @@ exit:
         ogs_assert(OGS_OK ==
             upf_pfcp_send_session_establishment_response(
                 xact, sess, created_pdr, num_of_created_pdr));
+
+    if (!sess->ipv4) goto exit; 
+
+    if (req->create_urr[0].volume_quota.presence) {
+        ogs_warn("XXXXXX volume quota in urr ***PRESENT***");
+        // forward ue traffic
+        // iptables -t filter -D FORWARD -s 1.2.3.4 -j DROP
+        char buf1[OGS_ADDRSTRLEN];
+        char str[100];
+        strcpy(str, "iptables -t filter -D FORWARD -d ");
+        strcat(str, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
+        strcat(str, " -j DROP");
+        ogs_warn("%s", str);
+        system(str);
+    } else {  
+        ogs_warn("XXXXXX volume quota in urr ***ABSENT***");
+        // forward drop traffic
+        // iptables -t filter -A FORWARD -s 1.2.3.4 -j DROP
+        char buf1[OGS_ADDRSTRLEN];
+        char str1[100];
+        strcpy(str1, "iptables -t filter -D FORWARD -d ");
+        strcat(str1, OGS_INET_NTOP(&sess->ipv4->addr, buf1));
+        strcat(str1, " -j DROP");
+        ogs_warn("XXXXXX %s", str1);
+        system(str1);
+        char buf2[OGS_ADDRSTRLEN];
+        char str2[100];
+        strcpy(str2, "iptables -t filter -A FORWARD -d ");
+        strcat(str2, OGS_INET_NTOP(&sess->ipv4->addr, buf2));
+        strcat(str2, " -j DROP");        
+        ogs_warn("XXXXXX %s", str2);
+        system(str2);
+    }
+exit:
 
     return;
 
