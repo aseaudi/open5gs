@@ -119,8 +119,10 @@ static void urr_update_time(smf_sess_t *sess, ogs_pfcp_urr_t *urr, ogs_diam_gy_m
 
     // if no credit left, force urr after 1 minute, to check if recharge balance
     if (gy_message->result_code == 4012 || gy_message->result_code == 5031 || gy_message->result_code == 5004) {
-        urr->rep_triggers.time_quota = 1;
-        urr->time_quota = 60;       
+        if (!strcmp(sess->full_dnn, "internet") {
+            urr->rep_triggers.time_quota = 1;
+            urr->time_quota = 60;       
+        }
     }
 }
 
