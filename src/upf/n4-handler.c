@@ -106,7 +106,7 @@ void upf_n4_handle_session_establishment_request(
     if (cause_value != OGS_PFCP_CAUSE_REQUEST_ACCEPTED)
         goto cleanup;
     ogs_warn("XXXXXX upf_n4_handle_session_establishment_request");
-    ogs_warn("XXXXXX req->apn_dnn %s", req->apn_dnn);
+    
 
     if (req->apn_dnn.presence) {
         char apn_dnn[OGS_MAX_DNN_LEN+1];
@@ -123,6 +123,7 @@ void upf_n4_handle_session_establishment_request(
         sess->apn_dnn = ogs_strdup(apn_dnn);
         ogs_assert(sess->apn_dnn);
     }
+    ogs_warn("XXXXXX sess->apn_dnn %s", sess->apn_dnn);
 
     for (i = 0; i < OGS_MAX_NUM_OF_QER; i++) {
         if (ogs_pfcp_handle_create_qer(&sess->pfcp, &req->create_qer[i],
@@ -227,10 +228,10 @@ void upf_n4_handle_session_establishment_request(
                 xact, sess, created_pdr, num_of_created_pdr));
 
     if (!sess->ipv4) goto exit; 
-rrrr
-    ogs_warn("XXXXXX pdr->dnn %s", pdr->dnn);
 
-    if (strcmp(pdr->dnn, "internet")) {
+    ogs_warn("XXXXXX sess->apn_dnn %s", sess->apn_dnn);
+
+    if (strcmp(sess->apn_dnn, "internet")) {
         ogs_warn("XXXXXX not internet apn, exit don't change iptables");
         goto exit;
     }
