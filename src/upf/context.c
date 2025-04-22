@@ -843,7 +843,7 @@ static void upf_sess_urr_acc_validity_time_setup(upf_sess_t *sess, ogs_pfcp_urr_
 
 static void upf_sess_urr_acc_time_quota_setup(upf_sess_t *sess, ogs_pfcp_urr_t *urr)
 {
-    ogs_warn("upf_sess_urr_acc_time_quota_setup");
+    ogs_warn("XXXXXX upf_sess_urr_acc_time_quota_setup");
     upf_sess_urr_acc_t *urr_acc = NULL;
 
     ogs_assert(urr->id > 0 && urr->id <= OGS_MAX_NUM_OF_URR);
