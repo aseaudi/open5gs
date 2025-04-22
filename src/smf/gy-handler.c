@@ -126,7 +126,9 @@ static void urr_update_time(smf_sess_t *sess, ogs_pfcp_urr_t *urr, ogs_diam_gy_m
             urr->rep_triggers.time_quota = 1;
             urr->time_quota = 60;       
         }
-        ogs_warn("XXXXXX apn is not internet, do not add URR");
+        else {
+            ogs_warn("XXXXXX apn is not internet, do not add URR");
+        }
     }
 }
 

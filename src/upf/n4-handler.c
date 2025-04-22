@@ -123,7 +123,6 @@ void upf_n4_handle_session_establishment_request(
         sess->apn_dnn = ogs_strdup(apn_dnn);
         ogs_assert(sess->apn_dnn);
     }
-    ogs_warn("XXXXXX sess->apn_dnn %s", sess->apn_dnn);
 
     for (i = 0; i < OGS_MAX_NUM_OF_QER; i++) {
         if (ogs_pfcp_handle_create_qer(&sess->pfcp, &req->create_qer[i],
