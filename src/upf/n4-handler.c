@@ -228,9 +228,9 @@ void upf_n4_handle_session_establishment_request(
 
     if (!sess->ipv4) goto exit; 
 
-    ogs_warn("XXXXXX sess->apn_dnn %s", sess->apn_dnn);
+    ogs_warn("XXXXXX pdr->dnn %s", pdr->dnn);
 
-    if (strcmp(sess->apn_dnn, "internet")) {
+    if (strcmp(pdr->dnn, "internet")) {
         ogs_warn("XXXXXX not internet apn, exit don't change iptables");
         goto exit;
     }
