@@ -227,7 +227,7 @@ void upf_n4_handle_session_establishment_request(
                 xact, sess, created_pdr, num_of_created_pdr));
 
     if (!sess->ipv4) goto exit; 
-
+rrrr
     ogs_warn("XXXXXX pdr->dnn %s", pdr->dnn);
 
     if (strcmp(pdr->dnn, "internet")) {
