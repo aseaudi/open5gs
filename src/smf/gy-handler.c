@@ -117,12 +117,16 @@ static void urr_update_time(smf_sess_t *sess, ogs_pfcp_urr_t *urr, ogs_diam_gy_m
         urr->time_threshold = 0;
     }
 
+    ogs_warn("XXXXXX urr_update_time sess->session.name %s", sess->session.name);
     // if no credit left, force urr after 1 minute, to check if recharge balance
+    ogs_warn("XXXXXX checking if OCS replies with 4012 or 5031 or 5004");
     if (gy_message->result_code == 4012 || gy_message->result_code == 5031 || gy_message->result_code == 5004) {
-        if (!strcmp(sess->full_dnn, "internet")) {
+        if (!strcmp(sess->session.name, "internet")) {
+            ogs_warn("XXXXXX apn is internet, add URR 60");
             urr->rep_triggers.time_quota = 1;
             urr->time_quota = 60;       
         }
+        ogs_warn("XXXXXX apn is not internet, do not add URR");
     }
 }
 

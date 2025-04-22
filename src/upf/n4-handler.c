@@ -227,7 +227,12 @@ void upf_n4_handle_session_establishment_request(
 
     if (!sess->ipv4) goto exit; 
 
-    if (strcmp(sess->apn_dnn, "internet")) goto exit;
+    ogs_warn("XXXXXX pdr->dnn %s", pdr->dnn);
+
+    if (strcmp(pdr->dnn, "internet")) {
+        ogs_warn("XXXXXX not internet apn, exit don't change iptables");
+        goto exit;
+    }
 
     if (req->create_urr[0].volume_quota.presence) {
         ogs_warn("XXXXXX volume quota in urr ***PRESENT***");
