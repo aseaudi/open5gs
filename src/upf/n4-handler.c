@@ -307,6 +307,12 @@ void upf_n4_handle_session_modification_request(
 
     ogs_warn("XXXXXX upf_n4_handle_session_modification_request");
     
+    ogs_warn("XXXXXX sess->apn_dnn %s", sess->apn_dnn);
+
+    if (strcmp(sess->apn_dnn, "internet")) {
+        ogs_warn("XXXXXX not internet apn, exit don't change iptables");
+        goto exit;
+    }
     if (req->update_urr[0].volume_quota.presence) {
         ogs_warn("XXXXXX volume quota in urr ***PRESENT***");
         // forward ue traffic
