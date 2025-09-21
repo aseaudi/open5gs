@@ -4696,8 +4696,8 @@ mme_bearer_t *mme_bearer_find_or_add_by_message(
             &message->esm.pdn_connectivity_request;
         if (pdn_connectivity_request->presencemask &
             OGS_NAS_EPS_PDN_CONNECTIVITY_REQUEST_ACCESS_POINT_NAME_PRESENT) {
-            sess = mme_sess_find_by_apn(mme_ue,
-                    pdn_connectivity_request->access_point_name.apn);
+            // sess = mme_sess_find_by_apn(mme_ue,
+                    // pdn_connectivity_request->access_point_name.apn);
             // if (sess && create_action != OGS_GTP_CREATE_IN_ATTACH_REQUEST) {
 
             //     sess->pti = pti;
