@@ -4696,22 +4696,22 @@ mme_bearer_t *mme_bearer_find_or_add_by_message(
             &message->esm.pdn_connectivity_request;
         if (pdn_connectivity_request->presencemask &
             OGS_NAS_EPS_PDN_CONNECTIVITY_REQUEST_ACCESS_POINT_NAME_PRESENT) {
-            // sess = mme_sess_find_by_apn(mme_ue,
-                    // pdn_connectivity_request->access_point_name.apn);
-            // if (sess && create_action != OGS_GTP_CREATE_IN_ATTACH_REQUEST) {
+            sess = mme_sess_find_by_apn(mme_ue,
+                    pdn_connectivity_request->access_point_name.apn);
+            if (sess && create_action != OGS_GTP_CREATE_IN_ATTACH_REQUEST) {
 
-            //     sess->pti = pti;
+                sess->pti = pti;
 
-            //     r = nas_eps_send_pdn_connectivity_reject(
-            //             sess,
-            //             OGS_NAS_ESM_CAUSE_MULTIPLE_PDN_CONNECTIONS_FOR_A_GIVEN_APN_NOT_ALLOWED,
-            //             create_action);
-            //     ogs_expect(r == OGS_OK);
-            //     ogs_assert(r != OGS_ERROR);
-            //     ogs_warn("APN duplicated [%s]",
-            //         pdn_connectivity_request->access_point_name.apn);
-            //     return NULL;
-            // }
+                r = nas_eps_send_pdn_connectivity_reject(
+                        sess,
+                        OGS_NAS_ESM_CAUSE_MULTIPLE_PDN_CONNECTIONS_FOR_A_GIVEN_APN_NOT_ALLOWED,
+                        create_action);
+                ogs_expect(r == OGS_OK);
+                ogs_assert(r != OGS_ERROR);
+                ogs_warn("APN duplicated [%s]",
+                    pdn_connectivity_request->access_point_name.apn);
+                return NULL;
+            }
         } else {
             sess = mme_sess_first(mme_ue);
             ogs_debug("[%s:%p]", mme_ue->imsi_bcd, mme_ue);
