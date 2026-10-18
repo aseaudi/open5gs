@@ -102,6 +102,7 @@ uint8_t smf_s5c_handle_create_session_request(
     ogs_gtp2_uli_t uli;
 
     smf_ue_t *smf_ue = NULL;
+    smf_sess_t *handover_src = NULL;
 
     ogs_gtp2_f_teid_t *sgw_s5c_teid, *sgw_s5u_teid;
     ogs_paa_t *paa = NULL;
@@ -291,7 +292,22 @@ uint8_t smf_s5c_handle_create_session_request(
     ogs_assert(rv == OGS_OK);
 
     /* Set UE IP Address */
-    rv = smf_sess_set_ue_ip(sess);
+    handover_src = NULL;
+    if (req->indication_flags.presence &&
+        req->indication_flags.data && req->indication_flags.len) {
+        ogs_gtp2_indication_t *indication = req->indication_flags.data;
+
+        /* Keep the UE IP across 3GPP <-> Non-3GPP handover (TS 23.402) */
+        if (indication->handover_indication)
+            handover_src = smf_sess_find_by_apn(smf_ue, sess->session.name,
+                    sess->gtp_rat_type == OGS_GTP2_RAT_TYPE_WLAN ?
+                        OGS_GTP2_RAT_TYPE_EUTRAN : OGS_GTP2_RAT_TYPE_WLAN);
+    }
+
+    if (handover_src && smf_sess_inherit_ue_ip(sess, handover_src))
+        rv = OGS_PFCP_CAUSE_REQUEST_ACCEPTED;
+    else
+        rv = smf_sess_set_ue_ip(sess);
     if (rv != OGS_PFCP_CAUSE_REQUEST_ACCEPTED) {
         /* only two possibilities are:
          * OGS_PFCP_CAUSE_ALL_DYNAMIC_ADDRESS_ARE_OCCUPIED

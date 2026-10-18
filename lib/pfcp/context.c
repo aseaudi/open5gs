@@ -2661,6 +2661,15 @@ ogs_pfcp_ue_ip_t *ogs_pfcp_ue_ip_alloc(
         }
     }
 
+    ue_ip->refcnt = 1;
+
+    return ue_ip;
+}
+
+ogs_pfcp_ue_ip_t *ogs_pfcp_ue_ip_ref(ogs_pfcp_ue_ip_t *ue_ip)
+{
+    ogs_assert(ue_ip);
+    ue_ip->refcnt++;
     return ue_ip;
 }
 
@@ -2669,6 +2678,9 @@ void ogs_pfcp_ue_ip_free(ogs_pfcp_ue_ip_t *ue_ip)
     ogs_pfcp_subnet_t *subnet = NULL;
 
     ogs_assert(ue_ip);
+    if (--ue_ip->refcnt > 0)
+        return;
+
     subnet = ue_ip->subnet;
 
     ogs_assert(subnet);

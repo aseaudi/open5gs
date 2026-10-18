@@ -361,6 +361,7 @@ typedef struct ogs_pfcp_subnet_s ogs_pfcp_subnet_t;
 typedef struct ogs_pfcp_ue_ip_s {
     uint32_t        addr[4];
     bool            static_ip;
+    int             refcnt;
 
     /* Related Context */
     ogs_pfcp_subnet_t    *subnet;
@@ -520,6 +521,7 @@ int ogs_pfcp_ue_pool_generate(void);
 ogs_pfcp_ue_ip_t *ogs_pfcp_ue_ip_alloc(
         uint8_t *cause_value, int family, const char *dnn, uint8_t *addr);
 void ogs_pfcp_ue_ip_free(ogs_pfcp_ue_ip_t *ip);
+ogs_pfcp_ue_ip_t *ogs_pfcp_ue_ip_ref(ogs_pfcp_ue_ip_t *ip);
 
 ogs_pfcp_dev_t *ogs_pfcp_dev_add(const char *ifname);
 void ogs_pfcp_dev_remove(ogs_pfcp_dev_t *dev);

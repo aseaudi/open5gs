@@ -1938,14 +1938,16 @@ uint8_t smf_sess_set_ue_ip(smf_sess_t *sess)
     ogs_assert(sess->session.session_type);
 
     if (sess->ipv4) {
-        ogs_hash_set(smf_self()->ipv4_hash,
-                sess->ipv4->addr, OGS_IPV4_LEN, NULL);
+        ogs_hash_unset_if_owner(smf_self()->ipv4_hash,
+                sess->ipv4->addr, OGS_IPV4_LEN, sess);
         ogs_pfcp_ue_ip_free(sess->ipv4);
+        sess->ipv4 = NULL;
     }
     if (sess->ipv6) {
-        ogs_hash_set(smf_self()->ipv6_hash,
-                sess->ipv6->addr, OGS_IPV6_DEFAULT_PREFIX_LEN >> 3, NULL);
+        ogs_hash_unset_if_owner(smf_self()->ipv6_hash,
+                sess->ipv6->addr, OGS_IPV6_DEFAULT_PREFIX_LEN >> 3, sess);
         ogs_pfcp_ue_ip_free(sess->ipv6);
+        sess->ipv6 = NULL;
     }
 
     if (sess->session.session_type == OGS_PDU_SESSION_TYPE_IPV4) {
@@ -2011,6 +2013,33 @@ uint8_t smf_sess_set_ue_ip(smf_sess_t *sess)
     }
 
     return cause_value;
+}
+
+/* Share the UE IP of the other-RAT session (3GPP <-> Non-3GPP handover) */
+bool smf_sess_inherit_ue_ip(smf_sess_t *sess, smf_sess_t *from)
+{
+    ogs_assert(sess);
+    ogs_assert(from);
+
+    if (!from->ipv4 && !from->ipv6)
+        return false;
+    if (from->session.session_type != sess->session.session_type)
+        return false;
+
+    sess->paa = from->paa;
+
+    if (from->ipv4) {
+        sess->ipv4 = ogs_pfcp_ue_ip_ref(from->ipv4);
+        ogs_hash_set(smf_self()->ipv4_hash,
+                sess->ipv4->addr, OGS_IPV4_LEN, sess);
+    }
+    if (from->ipv6) {
+        sess->ipv6 = ogs_pfcp_ue_ip_ref(from->ipv6);
+        ogs_hash_set(smf_self()->ipv6_hash,
+                sess->ipv6->addr, OGS_IPV6_DEFAULT_PREFIX_LEN >> 3, sess);
+    }
+
+    return true;
 }
 
 void smf_sess_set_paging_n1n2message_location(
@@ -2079,12 +2108,13 @@ void smf_sess_remove(smf_sess_t *sess)
             sizeof(sess->smf_n4_seid), NULL);
 
     if (sess->ipv4) {
-        ogs_hash_set(self.ipv4_hash, sess->ipv4->addr, OGS_IPV4_LEN, NULL);
+        ogs_hash_unset_if_owner(self.ipv4_hash,
+                sess->ipv4->addr, OGS_IPV4_LEN, sess);
         ogs_pfcp_ue_ip_free(sess->ipv4);
     }
     if (sess->ipv6) {
-        ogs_hash_set(self.ipv6_hash,
-                sess->ipv6->addr, OGS_IPV6_DEFAULT_PREFIX_LEN >> 3, NULL);
+        ogs_hash_unset_if_owner(self.ipv6_hash,
+                sess->ipv6->addr, OGS_IPV6_DEFAULT_PREFIX_LEN >> 3, sess);
         ogs_pfcp_ue_ip_free(sess->ipv6);
     }
 
