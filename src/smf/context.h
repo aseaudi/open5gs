@@ -148,6 +148,9 @@ typedef struct smf_context_s {
 
     uint16_t        mtu;            /* MTU to advertise in PCO */
 
+    /* Skip the E-UTRAN session check on handover to WLAN */
+    bool            wlan_handover_eutran;
+
     struct  {
         const char *integrity_protection_indication;
         const char *confidentiality_protection_indication;
