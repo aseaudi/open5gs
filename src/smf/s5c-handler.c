@@ -251,7 +251,8 @@ uint8_t smf_s5c_handle_create_session_request(
                 eutran_session_count++;
             }
 
-            if (eutran_session_count < 1) {
+            if (!smf_self()->wlan_handover_eutran &&
+                eutran_session_count < 1) {
                 ogs_error("Cannot handover to WLAN");
                 return OGS_GTP2_CAUSE_MULTIPLE_ACCESSES_TO_A_PDN_CONNECTION_NOT_ALLOWED;
             }

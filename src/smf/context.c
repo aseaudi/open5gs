@@ -550,6 +550,8 @@ int smf_context_parse_config(void)
                             YAML_SCALAR_NODE);
                     self.mtu = atoi(ogs_yaml_iter_value(&smf_iter));
                     ogs_assert(self.mtu);
+                } else if (!strcmp(smf_key, "wlan_handover_eutran")) {
+                    self.wlan_handover_eutran = ogs_yaml_iter_bool(&smf_iter);
                 } else if (!strcmp(smf_key, "p-cscf")) {
                     ogs_yaml_iter_t p_cscf_iter;
                     ogs_yaml_iter_recurse(&smf_iter, &p_cscf_iter);
